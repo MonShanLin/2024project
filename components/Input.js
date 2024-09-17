@@ -1,14 +1,13 @@
-import React from 'react'
-import { useState } from 'react'
-import { TextInput, Text, Button, View, Modal, StyleSheet  } from 'react-native';
+import React, { useState } from 'react';
+import { TextInput, Text, Button, View, Modal, StyleSheet } from 'react-native';
 
 export default function Input({ focus, onConfirm, visible }) {
     const [text, setText] = useState("");
     const [count, setCount] = useState(0);
     const [isFocused, setIsFocused] = useState(focus);
-    
+
     const handleConfirm = () => {
-        console.log(text);
+        console.log(text);  
         onConfirm(text);
     };
 
@@ -17,37 +16,56 @@ export default function Input({ focus, onConfirm, visible }) {
             visible={visible}
             animationType="slide"
         >
-        <View style={styles.container}>
-            <TextInput
-            placeholder="Type something here"
-            autoCorrect={true}
-            keyboardType="default"
-            value={text}
-            style={{ borderBottomColor: "purple", borderBottomWidth: 2 }}
-            onChangeText={(changedText) => {
-                setText(changedText);
-                setCount(changedText.length);
-            }}
-            autoFocus={focus}
-            onFocus={() => setIsFocused(true)}
-            onSubmitEditing={() => setIsFocused(false)}
-        />
-        {isFocused ? (
-            count > 0 ? <Text>Number of Characters: {count}</Text> : null
-        ) : (
-            count < 3 ? <Text>Please type more than 3 characters</Text> : <Text>Thank you</Text>
-        )}
-        <Button title="Confirm" onPress={handleConfirm} /> 
-        </View>
-    </Modal>
+            <View style={styles.container}>
+                <TextInput
+                    placeholder="Type something here"
+                    autoCorrect={true}
+                    keyboardType="default"
+                    value={text}
+                    style={styles.input}
+                    onChangeText={(changedText) => {
+                        setText(changedText);
+                        setCount(changedText.length);
+                    }}
+                    autoFocus={focus}
+                    onFocus={() => setIsFocused(true)}
+                    onSubmitEditing={() => setIsFocused(false)}
+                />
+                {isFocused ? (
+                    count > 0 ? <Text style={styles.text}>Number of Characters: {count}</Text> : null
+                ) : (
+                    count < 3 ? <Text style={styles.text}>Please type more than 3 characters</Text> : <Text style={styles.text}>Thank you</Text>
+                )}
+                <View style={styles.buttonContainer}>
+                    <Button title="Confirm" onPress={handleConfirm} />
+                </View>
+            </View>
+        </Modal>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
-      flex: 1,
-      backgroundColor: '#fff',
-      alignItems: 'center',
-      justifyContent: 'center',
+        flex: 1,
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingHorizontal: 20, 
     },
-    });
+    input: {
+        width: '80%',
+        borderBottomColor: 'purple',
+        borderBottomWidth: 1,  
+        padding: 5,  
+        marginBottom: 20,
+    },
+    text: {
+        fontSize: 16,
+        color: 'purple',
+        marginVertical: 10,
+    },
+    buttonContainer: {
+        width: '40%',  
+        marginTop: 20,
+    },
+});

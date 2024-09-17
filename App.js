@@ -3,7 +3,6 @@ import { StyleSheet, Text, View, TextInput,Button } from 'react-native';
 import Header from './components/Header';
 import Input from './components/Input';
 import { useState } from 'react';
-
 export default function App() {
   const appName = "Mon-Shan's app!"; 
   const inputFocus = true;
