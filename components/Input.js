@@ -2,7 +2,7 @@ import React from 'react'
 import { useState } from 'react'
 import { TextInput, Text } from 'react-native';
 
-export default function Inputt({ focus }) {
+export default function Input({ focus }) {
     const [text, setText] = useState("");
     const [count, setCount] = useState(0);
     const [isFocused, setIsFocused] = useState(focus);
