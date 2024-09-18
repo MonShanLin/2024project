@@ -9,6 +9,8 @@ export default function Input({ focus, onConfirm, onCancel, visible }) {
     const handleConfirm = () => {
         console.log(text);  
         onConfirm(text);
+        setText("");
+        setCount(0);
     };
 
     const handleCancel = () => {
@@ -17,7 +19,11 @@ export default function Input({ focus, onConfirm, onCancel, visible }) {
             'Do you want to cancel?',
             [
                 { text: 'No', style: 'cancel' },
-                { text: 'OK', onPress: () => onCancel() }, 
+                { text: 'OK', onPress: () => {
+                    onCancel();
+                    setText("");
+                    setCount(0);
+                }},
             ],
             { cancelable: true }
         );
