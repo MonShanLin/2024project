@@ -5,6 +5,7 @@ export default function Input({ focus, onConfirm, onCancel, visible }) {
     const [text, setText] = useState("");
     const [count, setCount] = useState(0);
     const [isFocused, setIsFocused] = useState(focus);
+    const lengthRequired = 3; 
 
     const handleConfirm = () => {
         console.log(text);  
@@ -56,7 +57,8 @@ export default function Input({ focus, onConfirm, onCancel, visible }) {
                 )}
                 <View style={styles.buttonHorizontal}>
                     <View style={styles.buttonContainer}>
-                        <Button title="Confirm" onPress={handleConfirm} />
+                        <Button title="Confirm" onPress={handleConfirm} disabled={count < lengthRequired}/>
+            
                     </View>
                     <View style={styles.buttonContainer}>
                          <Button title="Cancel" onPress={handleCancel} />
