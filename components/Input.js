@@ -13,8 +13,8 @@ export default function Input({ focus, onConfirm, onCancel, visible }) {
 
     const handleCancel = () => {
         Alert.alert(
-            'Cancel',
-            'Are you sure you want to cancel?',
+            'Alert',
+            'Do you want to cancel?',
             [
                 { text: 'No', style: 'cancel' },
                 { text: 'OK', onPress: () => onCancel() }, 
@@ -48,12 +48,13 @@ export default function Input({ focus, onConfirm, onCancel, visible }) {
                 ) : (
                     count < 3 ? <Text style={styles.text}>Please type more than 3 characters</Text> : <Text style={styles.text}>Thank you</Text>
                 )}
-                <View style={styles.buttonContainer}>
-                    <Button title="Confirm" onPress={handleConfirm} />
-                </View>
-
-                <View style={styles.buttonContainer}>
-                    <Button title="Cancel" onPress={handleCancel} />
+                <View style={styles.buttonHorizontal}>
+                    <View style={styles.buttonContainer}>
+                        <Button title="Confirm" onPress={handleConfirm} />
+                    </View>
+                    <View style={styles.buttonContainer}>
+                         <Button title="Cancel" onPress={handleCancel} />
+                    </View>
                 </View>
             </View>
         </Modal>
@@ -82,6 +83,12 @@ const styles = StyleSheet.create({
     },
     buttonContainer: {
         width: '40%',  
+        marginTop: 20,
+    },
+    buttonHorizontal: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
         marginTop: 20,
     },
 });
