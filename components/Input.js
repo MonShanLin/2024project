@@ -7,14 +7,14 @@ export default function Input({ focus, onConfirm, onCancel, visible }) {
     const [isFocused, setIsFocused] = useState(focus);
     const lengthRequired = 3; 
 
-    const handleConfirm = () => {
+    const handleConfirmButton = () => {
         console.log(text);  
         onConfirm(text);
         setText("");
         setCount(0);
     };
 
-    const handleCancel = () => {
+    const handleCancelButton = () => {
         Alert.alert(
             'Alert',
             'Do you want to cancel?',
@@ -70,10 +70,10 @@ export default function Input({ focus, onConfirm, onCancel, visible }) {
                 )}
                 <View style={styles.buttonHorizontal}>
                     <View style={styles.buttonContainer}>
-                        <Button title="Confirm" onPress={handleConfirm} disabled={count < lengthRequired}/>
+                        <Button title="Confirm" onPress={handleConfirmButton} disabled={count < lengthRequired}/>
                     </View>
                     <View style={styles.buttonContainer}>
-                         <Button title="Cancel" onPress={handleCancel} />
+                         <Button title="Cancel" onPress={handleCancelButton} />
                     </View>
                 </View>
             </View>

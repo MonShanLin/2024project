@@ -15,7 +15,7 @@ export default function App() {
     setIsModalVisible(false);
   };
 
-  const handleCancel = () => {
+  const handleCancelButton = () => {
     setIsModalVisible(false);
   };
 
@@ -28,7 +28,7 @@ export default function App() {
         <Button title="Add a goal" onPress={() => setIsModalVisible(true)} /> 
       </View>
 
-      <Input focus={inputFocus} onConfirm={handleInputData} onCancel={handleCancel} visible={isModalVisible} />
+      <Input focus={inputFocus} onConfirm={handleInputData} onCancel={handleCancelButton} visible={isModalVisible} />
 
       <View style={styles.bottomView}>
         <Text>{inputText ? `You typed: ${inputText}` : "No input received yet"}</Text>
