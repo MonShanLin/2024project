@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TextInput, Text, Button, View, Modal, StyleSheet, Alert } from 'react-native';
+import { TextInput, Text, Button, View, Modal, StyleSheet, Alert, Image } from 'react-native';
 
 export default function Input({ focus, onConfirm, onCancel, visible }) {
     const [text, setText] = useState("");
@@ -36,6 +36,19 @@ export default function Input({ focus, onConfirm, onCancel, visible }) {
             animationType="slide"
         >
             <View style={styles.container}>
+                                
+                <Image 
+                    source={{ uri: 'https://cdn-icons-png.flaticon.com/512/2617/2617812.png' }} 
+                    style={styles.image} 
+                    alt="Target Icon from Network"
+                />
+                
+                <Image 
+                    source={require('../assets/2617812.png')} 
+                    style={styles.image} 
+                    alt="Target Icon from Local"
+                />
+
                 <TextInput
                     placeholder="Type something here"
                     autoCorrect={true}
@@ -53,12 +66,11 @@ export default function Input({ focus, onConfirm, onCancel, visible }) {
                 {isFocused ? (
                     count > 0 ? <Text style={styles.text}>Number of Characters: {count}</Text> : null
                 ) : (
-                    count < 3 ? <Text style={styles.text}>Please type more than 3 characters</Text> : <Text style={styles.text}>Thank you</Text>
+                    count < lengthRequired ? <Text style={styles.text}>Please type more than 3 characters</Text> : <Text style={styles.text}>Thank you</Text>
                 )}
                 <View style={styles.buttonHorizontal}>
                     <View style={styles.buttonContainer}>
                         <Button title="Confirm" onPress={handleConfirm} disabled={count < lengthRequired}/>
-            
                     </View>
                     <View style={styles.buttonContainer}>
                          <Button title="Cancel" onPress={handleCancel} />
@@ -98,5 +110,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 20,
+    },
+    image: {
+        width: 100,
+        height: 100,
+        margin: 10,
     },
 });

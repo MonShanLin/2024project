@@ -5,7 +5,7 @@ import Input from './components/Input';
 import { useState } from 'react';
 
 export default function App() {
-  const appName = "Mon-Shan's app!"; 
+  const appName = "Phoebe's app!"; 
   const inputFocus = true;
   const [inputText, setInputText] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -23,7 +23,7 @@ export default function App() {
     <SafeAreaView style={styles.container}>
       <StatusBar style="auto" />
 
-      <View style={styles.topＶiew}>
+      <View style={styles.topView}>
         <Header name={appName}/>
         <Button title="Add a goal" onPress={() => setIsModalVisible(true)} /> 
       </View>
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
-  topＶiew: {
+  topView: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
