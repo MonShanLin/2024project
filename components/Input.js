@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { TextInput, Text, Button, View, Modal, StyleSheet } from 'react-native';
+import { TextInput, Text, Button, View, Modal, StyleSheet, Alert } from 'react-native';
 
-export default function Input({ focus, onConfirm, visible }) {
+export default function Input({ focus, onConfirm, onCancel, visible }) {
     const [text, setText] = useState("");
     const [count, setCount] = useState(0);
     const [isFocused, setIsFocused] = useState(focus);
@@ -9,6 +9,18 @@ export default function Input({ focus, onConfirm, visible }) {
     const handleConfirm = () => {
         console.log(text);  
         onConfirm(text);
+    };
+
+    const handleCancel = () => {
+        Alert.alert(
+            'Cancel',
+            'Are you sure you want to cancel?',
+            [
+                { text: 'No', style: 'cancel' },
+                { text: 'OK', onPress: () => onCancel() }, 
+            ],
+            { cancelable: true }
+        );
     };
 
     return (
@@ -39,6 +51,10 @@ export default function Input({ focus, onConfirm, visible }) {
                 <View style={styles.buttonContainer}>
                     <Button title="Confirm" onPress={handleConfirm} />
                 </View>
+
+                <View style={styles.buttonContainer}>
+                    <Button title="Cancel" onPress={handleCancel} />
+                </View>
             </View>
         </Modal>
     );
@@ -54,8 +70,8 @@ const styles = StyleSheet.create({
     },
     input: {
         width: '80%',
-        borderBottomColor: 'purple',
-        borderWidth: 1,  
+        borderColor: 'darkorchid',
+        borderWidth: 2,  
         padding: 5,  
         marginBottom: 20,
     },

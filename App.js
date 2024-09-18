@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, TextInput,Button, SafeAreaView } from 'react-na
 import Header from './components/Header';
 import Input from './components/Input';
 import { useState } from 'react';
+
 export default function App() {
   const appName = "Mon-Shan's app!"; 
   const inputFocus = true;
@@ -11,6 +12,10 @@ export default function App() {
 
   const handleInputData = (text) => {
     setInputText(text);
+    setIsModalVisible(false);
+  };
+
+  const handleCancel = () => {
     setIsModalVisible(false);
   };
 
@@ -23,7 +28,7 @@ export default function App() {
         <Button title="Add a goal" onPress={() => setIsModalVisible(true)} /> 
       </View>
 
-      <Input focus={inputFocus} onConfirm={handleInputData} visible={isModalVisible} />
+      <Input focus={inputFocus} onConfirm={handleInputData} onCancel={handleCancel} visible={isModalVisible} />
 
       <View style={styles.bottomView}>
         <Text>{inputText ? `You typed: ${inputText}` : "No input received yet"}</Text>
@@ -48,7 +53,7 @@ const styles = StyleSheet.create({
 
   bottomView: {
     flex: 4,
-    backgroundColor: 'pink',
+    backgroundColor: 'plum',
     alignItems: 'center',
   } 
 });
