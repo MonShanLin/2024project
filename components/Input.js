@@ -40,6 +40,7 @@ export default function Input({ focus, onConfirm, onCancel, visible }) {
                 <Image 
                     source={{ uri: 'https://cdn-icons-png.flaticon.com/512/2617/2617812.png' }} 
                     style={styles.image} 
+                    // alt is an alternative text description of the image to be read by the screen readers when they interacts with it
                     alt="Target Icon from Network"
                 />
                 
