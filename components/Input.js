@@ -8,12 +8,12 @@ export default function Input() {
     return (
         <TextInput
             placeholder="Type something here"
+            value={text}
             autoCorrect={true}
             keyboardType="default"
             style={{ borderBottomColor: "purple", borderBottomWidth: 2 }}
             onChangeText={(changedText) => {
                 setText(changedText);
-                value={text}
             }}
         />
     )
