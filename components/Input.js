@@ -3,7 +3,18 @@ import { TextInput, Text, View, StyleSheet } from 'react-native';
 
 export default function Input({focus}) {
     const [text, setText] = useState("");
-    
+    const [showCharacterCount, setShowCharacterCount] = useState(false);
+    const [message, setMessage] = useState("");
+
+    const handleTextInputBlur = () => {
+        setShowCharacterCount(false);
+        if (text.length >= 3) {
+          setMessage("Thank you");
+        } else {
+          setMessage("Please type more than 3 characters");
+        }
+      };
+
     return (
         <View style={styles.container}>
             <TextInput
@@ -12,13 +23,20 @@ export default function Input({focus}) {
                 autoFocus={focus}
                 autoCorrect={true} 
                 keyboardType="default"
-                style={styles.input}
+                style={styles.inputText}
                 onChangeText={(changedText) => {
-                    setText(changedText);    
+                    setText(changedText);   
+                    setShowCharacterCount(true);
+                    setMessage("");
                 }}
+                onBlur={handleTextInputBlur}
             />
-        {text.length > 0 && (
-            <Text style={styles.charCount}>Character count: {text.length}</Text>
+        {showCharacterCount && text.length > 0 && (
+            <Text style={styles.characterCount}>Character count: {text.length}</Text>
+        )}
+
+        {message.length > 0 && (
+            <Text style={styles.message}>{message}</Text>
         )}
         </View>
     )
@@ -30,15 +48,22 @@ const styles = StyleSheet.create({
     width: '80%',
     alignItems: 'center',
   },
-  input: {
+
+  inputText: {
     borderBottomColor: "purple",
     borderBottomWidth: 2,
     width: '100%',
     marginBottom: 10,
     padding: 5,
   },
-  charCount: {
+
+  characterCount: {
     marginTop: 5,
     color: 'gray',
+  },
+
+  message: {
+    marginTop: 10,
+    color: 'black',
   }
 });
