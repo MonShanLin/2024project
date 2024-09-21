@@ -12,9 +12,9 @@ export default function Header( {name} ) {
 const styles = StyleSheet.create({
     text : {
         fontSize: 20,
-        color: 'blue',
-        borderColor: 'black',
-        borderWidth: 1,
+        color: 'darkorchid',
+        borderColor: 'darkorchid',
+        borderWidth: 2,
         padding: 5,
         marginBottom: 5,
     }

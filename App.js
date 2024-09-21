@@ -3,8 +3,9 @@ import { StyleSheet, Text, View, TextInput,Button, SafeAreaView } from 'react-na
 import Header from './components/Header';
 import Input from './components/Input';
 import { useState } from 'react';
+
 export default function App() {
-  const appName = "Mon-Shan's app!"; 
+  const appName = "Phoebe's app!"; 
   const inputFocus = true;
   const [inputText, setInputText] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -14,16 +15,20 @@ export default function App() {
     setIsModalVisible(false);
   };
 
+  const handleCancelButton = () => {
+    setIsModalVisible(false);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="auto" />
 
-      <View style={styles.topＶiew}>
+      <View style={styles.topView}>
         <Header name={appName}/>
         <Button title="Add a goal" onPress={() => setIsModalVisible(true)} /> 
       </View>
 
-      <Input focus={inputFocus} onConfirm={handleInputData} visible={isModalVisible} />
+      <Input focus={inputFocus} onConfirm={handleInputData} onCancel={handleCancelButton} visible={isModalVisible} />
 
       <View style={styles.bottomView}>
         <Text>{inputText ? `You typed: ${inputText}` : "No input received yet"}</Text>
@@ -40,7 +45,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
-  topＶiew: {
+  topView: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
@@ -48,7 +53,7 @@ const styles = StyleSheet.create({
 
   bottomView: {
     flex: 4,
-    backgroundColor: 'pink',
+    backgroundColor: 'plum',
     alignItems: 'center',
   } 
 });
