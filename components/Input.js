@@ -104,11 +104,12 @@ const styles = StyleSheet.create({
     },
     buttonContainer: {
         width: '40%',  
+        marginHorizontal: 10,
         marginTop: 20,
     },
     buttonHorizontal: {
         flexDirection: 'row',
-        justifyContent: 'center',
+        justifyContent: 'space-between',
         alignItems: 'center',
         marginTop: 20,
     },
