@@ -34,7 +34,8 @@ export default function App() {
 
       <Input focus={inputFocus} onConfirm={handleInputData} onCancel={handleCancelButton} visible={isModalVisible} />
 
-      <ScrollView style={styles.bottomView} contentContainerStyle={styles.scrollContent}>
+<View  style={styles.bottomView} >
+      <ScrollView contentContainerStyle={styles.scrollContent}>
         <Text style={styles.header}>Your Goals:</Text>
 
         {multiGoals.length === 0 ? (
@@ -47,6 +48,7 @@ export default function App() {
           ))
         )}
       </ScrollView>
+      </View>
     </SafeAreaView>
   );
 }
