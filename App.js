@@ -20,6 +20,10 @@ export default function App() {
     setIsModalVisible(false);
   };
 
+  const handleDeleteGoal = (goalId) => {
+    setMultiGoals((prevGoals) => prevGoals.filter((goal) => goal.id !== goalId));
+  };
+
   const handleCancelButton = () => {
     setIsModalVisible(false);
   };
@@ -38,28 +42,10 @@ export default function App() {
 <View  style={styles.bottomView} >
     <FlatList
           data={multiGoals}  
-          renderItem={({ item }) => <GoalItem goal={item} />}
-          // renderItem={({ item }) => ( 
-          //  <View style={styles.goalItemContainer}>
-          //     <Text style={styles.goalItem}>{item.text}</Text>
-          //   </View>
-        //  )}
+          renderItem={({ item }) => <GoalItem goal={item} onDelete={handleDeleteGoal}/>}
           keyExtractor={(item) => item.id}  
          contentContainerStyle={styles.scrollContent}
         />
-      {/* <ScrollView contentContainerStyle={styles.scrollContent}>
-        <Text style={styles.header}>Your Goals:</Text>
-
-        {multiGoals.length === 0 ? (
-          <Text>No goals added yet</Text>
-        ) : (
-          multiGoals.map((goal) => (
-            <View key={goal.id} style={styles.goalItemContainer}>
-              <Text style={styles.goalItem}>{goal.text}</Text>
-            </View>
-          ))
-        )}
-      </ScrollView> */}
       </View>
     </SafeAreaView>
   );
