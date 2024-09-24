@@ -31,11 +31,13 @@ export default function Input({ focus, onConfirm, onCancel, visible }) {
     };
 
     return (
+
         <Modal
             visible={visible}
-            animationType="slide"
+            animationType="slide" transparent={true}
         >
             <View style={styles.container}>
+            <View style={styles.modelContainer}>
                                 
                 <Image 
                     source={{ uri: 'https://cdn-icons-png.flaticon.com/512/2617/2617812.png' }} 
@@ -78,6 +80,7 @@ export default function Input({ focus, onConfirm, onCancel, visible }) {
                     </View>
                 </View>
             </View>
+            </View>
         </Modal>
     );
 }
@@ -85,11 +88,18 @@ export default function Input({ focus, onConfirm, onCancel, visible }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        //backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
         paddingHorizontal: 20, 
     },
+
+    modelContainer: {
+        backgroundColor: '#999',
+        alignItems: 'center',
+        borderRadius: 6,
+    },
+
     input: {
         width: '80%',
         borderColor: 'darkorchid',
@@ -104,11 +114,12 @@ const styles = StyleSheet.create({
     },
     buttonContainer: {
         width: '40%',  
+        marginHorizontal: 10,
         marginTop: 20,
     },
     buttonHorizontal: {
         flexDirection: 'row',
-        justifyContent: 'center',
+        justifyContent: 'space-between',
         alignItems: 'center',
         marginTop: 20,
     },

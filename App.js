@@ -1,18 +1,27 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TextInput,Button, SafeAreaView } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Button, SafeAreaView,  FlatList} from 'react-native';
 import Header from './components/Header';
 import Input from './components/Input';
+import GoalItem from './components/GoalItem';
 import { useState } from 'react';
 
 export default function App() {
   const appName = "Phoebe's app!"; 
   const inputFocus = true;
   const [inputText, setInputText] = useState("");
+  const [multiGoals, setMultiGoals] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const handleInputData = (text) => {
-    setInputText(text);
+    setMultiGoals((prevGoals) => [
+      ...prevGoals,
+      { text: text, id: Math.random().toString() },
+    ]);
     setIsModalVisible(false);
+  };
+
+  const handleDeleteGoal = (goalId) => {
+    setMultiGoals((prevGoals) => prevGoals.filter((goal) => goal.id !== goalId));
   };
 
   const handleCancelButton = () => {
@@ -30,8 +39,13 @@ export default function App() {
 
       <Input focus={inputFocus} onConfirm={handleInputData} onCancel={handleCancelButton} visible={isModalVisible} />
 
-      <View style={styles.bottomView}>
-        <Text>{inputText ? `You typed: ${inputText}` : "No input received yet"}</Text>
+<View  style={styles.bottomView} >
+    <FlatList
+          data={multiGoals}  
+          renderItem={({ item }) => <GoalItem goal={item} onDelete={handleDeleteGoal}/>}
+          keyExtractor={(item) => item.id}  
+         contentContainerStyle={styles.scrollContent}
+        />
       </View>
     </SafeAreaView>
   );
@@ -41,7 +55,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    // alignItems: 'center',
     justifyContent: 'center',
   },
 
@@ -54,6 +67,30 @@ const styles = StyleSheet.create({
   bottomView: {
     flex: 4,
     backgroundColor: 'plum',
+  },
+
+  scrollContent: {
     alignItems: 'center',
-  } 
+  },
+
+  header: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+
+  goalItemContainer: {
+    marginBottom: 10,
+  },
+
+  goalItem: {
+    padding: 10,
+    fontSize: 16,
+    borderColor: 'darkorchid',
+    borderWidth: 1,
+    borderRadius: 5,
+    marginBottom: 5,
+    color: 'purple',
+    backgroundColor: 'gainsboro',
+  },
 });
