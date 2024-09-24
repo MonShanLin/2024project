@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TextInput, Button, SafeAreaView,  FlatList } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Button, SafeAreaView,  ScrollView} from 'react-native';
 import Header from './components/Header';
 import Input from './components/Input';
 import { useState } from 'react';
@@ -34,16 +34,17 @@ export default function App() {
 
       <Input focus={inputFocus} onConfirm={handleInputData} onCancel={handleCancelButton} visible={isModalVisible} />
 
-      <View style={styles.bottomView}>
+      <View style={styles.bottomView} contentContainerStyle={styles.scrollContent}>
         <Text style={styles.header}>Your Goals:</Text>
+
         {multiGoals.length === 0 ? (
           <Text>No goals added yet</Text>
         ) : (
-          <FlatList
-            data={multiGoals}
-            renderItem={({ item }) => <Text style={styles.goalItem}>{item.text}</Text>}
-            keyExtractor={(item) => item.id}
-          />
+          multiGoals.map((goal) => (
+            <View key={goal.id} style={styles.goalItemContainer}>
+              <Text style={styles.goalItem}>{goal.text}</Text>
+            </View>
+          ))
         )}
       </View>
     </SafeAreaView>
@@ -66,13 +67,21 @@ const styles = StyleSheet.create({
 
   bottomView: {
     flex: 4,
+    alignItems: 'center',
     backgroundColor: 'plum',
+  },
+
+  scrollContent: {
     alignItems: 'center',
   },
 
   header: {
     fontSize: 18,
     fontWeight: 'bold',
+    marginBottom: 10,
+  },
+
+  goalItemContainer: {
     marginBottom: 10,
   },
 
