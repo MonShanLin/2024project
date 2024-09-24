@@ -34,7 +34,7 @@ export default function App() {
 
       <Input focus={inputFocus} onConfirm={handleInputData} onCancel={handleCancelButton} visible={isModalVisible} />
 
-      <View style={styles.bottomView} contentContainerStyle={styles.scrollContent}>
+      <ScrollView style={styles.bottomView} contentContainerStyle={styles.scrollContent}>
         <Text style={styles.header}>Your Goals:</Text>
 
         {multiGoals.length === 0 ? (
@@ -46,7 +46,7 @@ export default function App() {
             </View>
           ))
         )}
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -55,7 +55,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    // alignItems: 'center',
     justifyContent: 'center',
   },
 
@@ -67,7 +66,6 @@ const styles = StyleSheet.create({
 
   bottomView: {
     flex: 4,
-    alignItems: 'center',
     backgroundColor: 'plum',
   },
 
