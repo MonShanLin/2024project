@@ -2,6 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TextInput, Button, SafeAreaView,  FlatList} from 'react-native';
 import Header from './components/Header';
 import Input from './components/Input';
+import GoalItem from './components/GoalItem';
 import { useState } from 'react';
 
 export default function App() {
@@ -37,11 +38,12 @@ export default function App() {
 <View  style={styles.bottomView} >
     <FlatList
           data={multiGoals}  
-          renderItem={({ item }) => ( 
-           <View style={styles.goalItemContainer}>
-              <Text style={styles.goalItem}>{item.text}</Text>
-            </View>
-         )}
+          renderItem={({ item }) => <GoalItem goal={item} />}
+          // renderItem={({ item }) => ( 
+          //  <View style={styles.goalItemContainer}>
+          //     <Text style={styles.goalItem}>{item.text}</Text>
+          //   </View>
+        //  )}
           keyExtractor={(item) => item.id}  
          contentContainerStyle={styles.scrollContent}
         />
