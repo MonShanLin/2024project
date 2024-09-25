@@ -45,6 +45,7 @@ export default function App() {
           renderItem={({ item }) => <GoalItem goal={item} onDelete={handleDeleteGoal}/>}
           keyExtractor={(item) => item.id}  
           contentContainerStyle={styles.scrollContent}
+          ListHeaderComponent={multiGoals.length > 0 ? <Text style={styles.headerText}>My Goals</Text> : null}
           ListEmptyComponent={
           <Text style={styles.emptyList}>No goals to show</Text>
         }
@@ -98,11 +99,17 @@ const styles = StyleSheet.create({
   },
 
   emptyList: {
-    fontSize: 18,
+    fontSize: 22,
     color: 'darkorchid',
-    fontStyle: 'italic',
     textAlign: 'center',
     marginVertical: 20,
+  },
+
+  headerText: {
+    fontSize: 22,
+    color: 'darkorchid',
+    marginVertical: 20,
+    textAlign: 'center',
   },
 });
 
