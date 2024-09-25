@@ -44,7 +44,10 @@ export default function App() {
           data={multiGoals}  
           renderItem={({ item }) => <GoalItem goal={item} onDelete={handleDeleteGoal}/>}
           keyExtractor={(item) => item.id}  
-         contentContainerStyle={styles.scrollContent}
+          contentContainerStyle={styles.scrollContent}
+          ListEmptyComponent={
+          <Text style={styles.emptyList}>No goals to show</Text>
+        }
         />
       </View>
     </SafeAreaView>
@@ -93,4 +96,13 @@ const styles = StyleSheet.create({
     color: 'purple',
     backgroundColor: 'gainsboro',
   },
+
+  emptyList: {
+    fontSize: 18,
+    color: 'darkorchid',
+    fontStyle: 'italic',
+    textAlign: 'center',
+    marginVertical: 20,
+  },
 });
+
