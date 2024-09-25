@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TextInput, Button, SafeAreaView,  FlatList} from 'react-native';
+import { StyleSheet, Text, View, Button, SafeAreaView,  FlatList, Alert } from 'react-native';
 import Header from './components/Header';
 import Input from './components/Input';
 import GoalItem from './components/GoalItem';
@@ -8,7 +8,6 @@ import { useState } from 'react';
 export default function App() {
   const appName = "Phoebe's app!"; 
   const inputFocus = true;
-  const [inputText, setInputText] = useState("");
   const [multiGoals, setMultiGoals] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
@@ -22,6 +21,25 @@ export default function App() {
 
   const handleDeleteGoal = (goalId) => {
     setMultiGoals((prevGoals) => prevGoals.filter((goal) => goal.id !== goalId));
+  };
+
+  const handleDeleteAll = () => {
+    Alert.alert(
+      "Delete All",
+      "Do you want to delete all?",
+      [
+        {
+          text: "No",
+          style: "cancel",
+        },
+        {
+          text: "Yes",
+          onPress: () => {
+            setMultiGoals([]);
+          },
+        },
+      ]
+    );
   };
 
   const handleCancelButton = () => {
@@ -49,6 +67,13 @@ export default function App() {
           ListEmptyComponent={
           <Text style={styles.emptyList}>No goals to show</Text>
         }
+        ListFooterComponent={
+          multiGoals.length > 0 ? (
+            <View style={styles.footer}>
+              <Button title="Delete All" onPress={handleDeleteAll} />
+            </View>
+          ) : null
+        }
         />
       </View>
     </SafeAreaView>
@@ -71,6 +96,8 @@ const styles = StyleSheet.create({
   bottomView: {
     flex: 4,
     backgroundColor: 'plum',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 
   scrollContent: {
@@ -99,17 +126,24 @@ const styles = StyleSheet.create({
   },
 
   emptyList: {
-    fontSize: 22,
+    fontSize: 25,
+    fontWeight: 'bold',
     color: 'darkorchid',
     textAlign: 'center',
     marginVertical: 20,
   },
 
   headerText: {
-    fontSize: 22,
+    fontSize: 25,
+    fontWeight: 'bold',
     color: 'darkorchid',
     marginVertical: 20,
     textAlign: 'center',
+  },
+
+  footer: {
+    marginVertical: 20,
+    color: 'darkorchid',
   },
 });
 

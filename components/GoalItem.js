@@ -8,7 +8,7 @@ export default function GoalItem ({ goal, onDelete }) {
           <Text style={styles.goalItem}>{goal.text}</Text>
           <Button
             title="X"
-            color="white"  
+            color="white" 
             onPress={() => onDelete(goal.id)} 
           />
         </View>
