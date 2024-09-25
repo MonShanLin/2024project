@@ -63,17 +63,21 @@ export default function App() {
           renderItem={({ item }) => <GoalItem goal={item} onDelete={handleDeleteGoal}/>}
           keyExtractor={(item) => item.id}  
           contentContainerStyle={styles.scrollContent}
-          ListHeaderComponent={multiGoals.length > 0 ? <Text style={styles.headerText}>My Goals</Text> : null}
+          
+          ListHeaderComponent={multiGoals.length > 0 ? <Text style={styles.listHeader}>My Goals</Text> : null}
+          
           ListEmptyComponent={
-          <Text style={styles.emptyList}>No goals to show</Text>
-        }
-        ListFooterComponent={
-          multiGoals.length > 0 ? (
-            <View style={styles.footer}>
-              <Button title="Delete All" onPress={handleDeleteAll} />
-            </View>
-          ) : null
-        }
+          <Text style={styles.listEmpty}>No goals to show</Text>
+          }
+          ListFooterComponent={
+            multiGoals.length > 0 ? (
+              <View style={styles.listFooter}>
+                <Button title="Delete All" onPress={handleDeleteAll} />
+              </View>
+            ) : null
+          }
+
+          ItemSeparatorComponent={() => <View style={styles.listSeparator} />}
         />
       </View>
     </SafeAreaView>
@@ -96,18 +100,18 @@ const styles = StyleSheet.create({
   bottomView: {
     flex: 4,
     backgroundColor: 'plum',
-    justifyContent: 'center',
-    alignItems: 'center',
+    width: '100%',
   },
 
   scrollContent: {
     alignItems: 'center',
   },
 
-  header: {
-    fontSize: 18,
+  listHeader: {
+    fontSize: 25,
     fontWeight: 'bold',
     marginBottom: 10,
+    color: 'darkorchid',
   },
 
   goalItemContainer: {
@@ -125,7 +129,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'gainsboro',
   },
 
-  emptyList: {
+  listEmpty: {
     fontSize: 25,
     fontWeight: 'bold',
     color: 'darkorchid',
@@ -133,7 +137,7 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
 
-  headerText: {
+  listHeader: {
     fontSize: 25,
     fontWeight: 'bold',
     color: 'darkorchid',
@@ -141,9 +145,16 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 
-  footer: {
+  listFooter: {
     marginVertical: 20,
     color: 'darkorchid',
+  },
+
+  listSeparator: {
+    height: 5,
+    backgroundColor: 'grey',
+    marginBottom: 10,
+    marginTop: 10,
   },
 });
 
