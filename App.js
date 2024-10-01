@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, SafeAreaView } from 'react-native';
+import { StyleSheet, SafeAreaView, Button } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Home from './components/Home';
@@ -9,25 +9,27 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <NavigationContainer> 
+    <NavigationContainer>
       <Stack.Navigator>
-      <Stack.Screen
-        name="Home" 
-        component={Home} 
-        options={{
-          title: "All Goals", 
-          headerStyle: { backgroundColor: 'purple' }, 
-          headerTintColor: 'white',
+        <Stack.Screen
+          name="Home"
+          component={Home}
+          options={{
+            title: 'All Goals',
+            headerStyle: { backgroundColor: 'purple' },
+            headerTintColor: 'white',
           }}
         />
-        <Stack.Screen 
-          name="Details" 
-          component={GoalDetails} 
+        <Stack.Screen
+          name="Details"
+          component={GoalDetails}
           options={({ route }) => ({
-            title: route.params.goal.text 
+            title: route.params ? route.params.goal.text : 'Goal Details',
+            headerRight: () => (
+              <Button title="Warning" onPress={() => console.log('warning')} />
+            ),
           })}
         />
-
       </Stack.Navigator>
     </NavigationContainer>
   );
