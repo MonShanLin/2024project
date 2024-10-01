@@ -5,7 +5,7 @@ import Input from './Input';
 import GoalItem from './GoalItem';
 import { useState } from 'react';
 
-export default function Home() {
+export default function Home({ navigation }) {
   const appName = "Phoebe's app!"; 
   const inputFocus = true;
   const [multiGoals, setMultiGoals] = useState([]);
@@ -46,6 +46,10 @@ export default function Home() {
     setIsModalVisible(false);
   };
 
+  const navigateToGoalDetails = (goal) => {
+    navigation.navigate('Details', { goal });
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="auto" />
@@ -60,7 +64,12 @@ export default function Home() {
 <View  style={styles.bottomView} >
     <FlatList
           data={multiGoals}  
-          renderItem={({ item }) => <GoalItem goal={item} onDelete={handleDeleteGoal}/>}
+          renderItem={({ item }) => 
+          <GoalItem 
+            goal={item} 
+            onDelete={handleDeleteGoal}
+            onInfoPress={() => navigateToGoalDetails(item)}
+            /> }
           keyExtractor={(item) => item.id}  
           contentContainerStyle={styles.scrollContent}
           
