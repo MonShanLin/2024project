@@ -1,53 +1,37 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TextInput, Button, SafeAreaView,  FlatList} from 'react-native';
-import Header from './components/Header';
-import Input from './components/Input';
-import GoalItem from './components/GoalItem';
-import { useState } from 'react';
+import { StyleSheet, SafeAreaView, Button } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import Home from './components/Home';
+import GoalDetails from './components/GoalDetails';
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
-  const appName = "Phoebe's app!"; 
-  const inputFocus = true;
-  const [inputText, setInputText] = useState("");
-  const [multiGoals, setMultiGoals] = useState([]);
-  const [isModalVisible, setIsModalVisible] = useState(false);
-
-  const handleInputData = (text) => {
-    setMultiGoals((prevGoals) => [
-      ...prevGoals,
-      { text: text, id: Math.random().toString() },
-    ]);
-    setIsModalVisible(false);
-  };
-
-  const handleDeleteGoal = (goalId) => {
-    setMultiGoals((prevGoals) => prevGoals.filter((goal) => goal.id !== goalId));
-  };
-
-  const handleCancelButton = () => {
-    setIsModalVisible(false);
-  };
-
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar style="auto" />
-
-      <View style={styles.topView}>
-        <Header name={appName}/>
-        <Button title="Add a goal" onPress={() => setIsModalVisible(true)} /> 
-      </View>
-
-      <Input focus={inputFocus} onConfirm={handleInputData} onCancel={handleCancelButton} visible={isModalVisible} />
-
-<View  style={styles.bottomView} >
-    <FlatList
-          data={multiGoals}  
-          renderItem={({ item }) => <GoalItem goal={item} onDelete={handleDeleteGoal}/>}
-          keyExtractor={(item) => item.id}  
-         contentContainerStyle={styles.scrollContent}
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Home"
+          component={Home}
+          options={{
+            title: 'All Goals',
+            headerStyle: { backgroundColor: 'purple' },
+            headerTintColor: 'white',
+          }}
         />
-      </View>
-    </SafeAreaView>
+        <Stack.Screen
+          name="Details"
+          component={GoalDetails}
+          options={({ route }) => ({
+            title: route.params ? route.params.goal.text : 'Goal Details',
+            headerRight: () => (
+              <Button title="Warning" onPress={() => console.log('warning')} />
+            ),
+          })}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
@@ -56,41 +40,5 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     justifyContent: 'center',
-  },
-
-  topView: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-
-  bottomView: {
-    flex: 4,
-    backgroundColor: 'plum',
-  },
-
-  scrollContent: {
-    alignItems: 'center',
-  },
-
-  header: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-
-  goalItemContainer: {
-    marginBottom: 10,
-  },
-
-  goalItem: {
-    padding: 10,
-    fontSize: 16,
-    borderColor: 'darkorchid',
-    borderWidth: 1,
-    borderRadius: 5,
-    marginBottom: 5,
-    color: 'purple',
-    backgroundColor: 'gainsboro',
   },
 });

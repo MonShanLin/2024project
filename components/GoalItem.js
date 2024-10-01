@@ -1,16 +1,24 @@
 import React from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
 
-export default function GoalItem ({ goal, onDelete }) {
+export default function GoalItem ({ goal, onDelete, onInfoPress }) {
     
     return (
         <View style={styles.goalItemContainer}>
           <Text style={styles.goalItem}>{goal.text}</Text>
+
           <Button
             title="X"
-            color="white"  
+            color="black"
             onPress={() => onDelete(goal.id)} 
           />
+
+          <Button
+            title="i"
+            color="blue"
+            onPress={() => onInfoPress(goal)}
+          />
+
         </View>
       );
     }
@@ -35,4 +43,3 @@ export default function GoalItem ({ goal, onDelete }) {
           marginRight: 10,
         },
       });
-
