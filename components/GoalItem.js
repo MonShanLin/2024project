@@ -9,13 +9,13 @@ export default function GoalItem ({ goal, onDelete, onInfoPress }) {
 
           <Button
             title="X"
-            color="black" 
+            color="black"
             onPress={() => onDelete(goal.id)} 
           />
 
           <Button
             title="i"
-            color="blue"  
+            color="blue"
             onPress={() => onInfoPress(goal)}
           />
 

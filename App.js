@@ -20,7 +20,13 @@ export default function App() {
           headerTintColor: 'white',
           }}
         />
-        <Stack.Screen name="Details" component={GoalDetails} />
+        <Stack.Screen 
+          name="Details" 
+          component={GoalDetails} 
+          options={({ route }) => ({
+            title: route.params.goal.text 
+          })}
+        />
 
       </Stack.Navigator>
     </NavigationContainer>
