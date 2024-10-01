@@ -68,7 +68,7 @@ export default function Home({ navigation }) {
           <GoalItem 
             goal={item} 
             onDelete={handleDeleteGoal}
-            onInfoPress={() => navigateToGoalDetails(item)}
+            onInfoPress={navigateToGoalDetails}
             /> }
           keyExtractor={(item) => item.id}  
           contentContainerStyle={styles.scrollContent}

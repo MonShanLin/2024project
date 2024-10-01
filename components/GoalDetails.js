@@ -7,7 +7,9 @@ export default function GoalDetails ({ route }) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.goalText}>{goal.text}</Text>
+      <Text style={styles.title}>Goal Details</Text>
+      <Text style={styles.goalText}>Goal: {goal.text}</Text> 
+      <Text style={styles.goalId}>ID: {goal.id}</Text>
     </View>
   );
 };

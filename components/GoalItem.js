@@ -16,7 +16,7 @@ export default function GoalItem ({ goal, onDelete, onInfoPress }) {
           <Button
             title="i"
             color="blue"  
-            onPress={onInfoPress}
+            onPress={() => onInfoPress(goal)}
           />
 
         </View>
