@@ -10,15 +10,22 @@ export default function GoalItem ({ goal, onDelete }) {
     <Pressable
       onPress={() => navigation.navigate('Details', { goal })}
       android_ripple={{ color: 'pink' }} 
-      style={styles.goalItemContainer}
+      style={({ pressed }) => [
+        styles.goalItemContainer,
+        pressed && styles.pressedItem,
+      ]}
     >
      
         <Text style={styles.goalItem}>{goal.text}</Text>
 
       <Pressable onPress={() => onDelete(goal.id)}
         android_ripple={{ color: 'red' }}
-        style={styles.deleteButton} 
+        style={({ pressed }) => [
+          styles.deleteButton,
+          pressed && styles.pressedDeleteButton,
+        ]}
       >
+
        <Text style={styles.deleteText}>X</Text>
       </Pressable>     
     </Pressable>
@@ -44,10 +51,19 @@ const styles = StyleSheet.create({
     color: 'purple',
   },
 
+  pressedItem: {
+    backgroundColor: 'pink', 
+  },
+
   deleteButton: {
     padding: 5,
     borderRadius: 5, 
   },
+
+  pressedDeleteButton: {
+    opacity: 0.7,
+  },
+  
   deleteText: {
     color: 'red',
     fontWeight: 'bold',
