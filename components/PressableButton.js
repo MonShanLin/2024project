@@ -22,6 +22,10 @@ export default function PressableButton({ onPress, style, children }) {
 const styles = StyleSheet.create({
   button: {
     padding: 10,
+    backgroundColor: 'gainsboro',
+    borderRadius: 5,
+    alignItems: 'center',
+
   },
 
   pressed: {

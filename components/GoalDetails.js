@@ -1,6 +1,7 @@
 import React, {useState, useLayoutEffect, useEffect } from 'react';
 import { View, Text, StyleSheet, Button, Platform } from 'react-native';
 import PressableButton from './PressableButton';
+import { FontAwesome } from '@expo/vector-icons';
 
 export default function GoalDetails ({ route, navigation }) {
   const { goal, moreDetails } = route.params;
@@ -15,10 +16,8 @@ export default function GoalDetails ({ route, navigation }) {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <PressableButton onPress={handleWarning} style={{ backgroundColor: 'purple' }}>
-          <Text style={{ color: 'white' }}>
-            Warning
-          </Text>
+        <PressableButton onPress={handleWarning} style={{ backgroundColor: 'transparent' }}>
+          <FontAwesome name="exclamation-triangle" size={24} color={ 'white'} />
         </PressableButton>
       ),
     });
