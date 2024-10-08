@@ -1,5 +1,5 @@
 import React, {useState, useLayoutEffect, useEffect } from 'react';
-import { View, Text, StyleSheet, Button } from 'react-native';
+import { View, Text, StyleSheet, Button, Platform } from 'react-native';
 
 export default function GoalDetails ({ route, navigation }) {
   const { goal, moreDetails } = route.params;
@@ -17,7 +17,7 @@ export default function GoalDetails ({ route, navigation }) {
         <Button
           title="Warning"
           onPress={handleWarning}
-          color="white"
+          color={Platform.OS === 'android' ? 'purple' : 'white'} 
         />
       ),
     });
