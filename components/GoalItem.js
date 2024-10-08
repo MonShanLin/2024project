@@ -6,42 +6,50 @@ export default function GoalItem ({ goal, onDelete }) {
 
   const navigation = useNavigation();
 
-    return (
-      <Pressable
+  return (
+    <Pressable
       onPress={() => navigation.navigate('Details', { goal })}
+      android_ripple={{ color: 'pink' }} 
+      style={styles.goalItemContainer}
     >
-        <View style={styles.goalItemContainer}>
-          <Text style={styles.goalItem}>{goal.text}</Text>
+     
+        <Text style={styles.goalItem}>{goal.text}</Text>
 
-          <Pressable onPress={() => onDelete(goal.id)}>
-          <Text style={styles.deleteText}>X</Text>
-        </Pressable>
-      </View>
+      <Pressable onPress={() => onDelete(goal.id)}
+        android_ripple={{ color: 'red' }}
+        style={styles.deleteButton} 
+      >
+       <Text style={styles.deleteText}>X</Text>
+      </Pressable>     
     </Pressable>
-  );
+);
 }
 
-    const styles = StyleSheet.create({
-        goalItemContainer: {
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: 10,
-          marginTop: 10,
-        },
-      
-        goalItem: {
-          padding: 10,
-          fontSize: 16,
-          borderColor: 'darkorchid',
-          borderWidth: 1,
-          borderRadius: 5,
-          color: 'purple',
-          backgroundColor: 'gainsboro',
-          marginRight: 10,
-        },
-        deleteText: {
-          color: 'red',
-          fontWeight: 'bold',
-        },
-      });
+const styles = StyleSheet.create({
+  goalItemContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 10,
+    marginTop: 10,
+    padding: 10,
+    borderColor: 'darkorchid',
+    borderWidth: 1,
+    borderRadius: 5,
+    backgroundColor: 'gainsboro',
+  },
+
+  goalItem: {
+    fontSize: 16,
+    color: 'purple',
+  },
+
+  deleteButton: {
+    padding: 5,
+    borderRadius: 5, 
+  },
+  deleteText: {
+    color: 'red',
+    fontWeight: 'bold',
+  },
+});
