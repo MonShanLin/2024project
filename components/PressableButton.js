@@ -25,6 +25,7 @@ const styles = StyleSheet.create({
   },
 
   pressed: {
+    backgroundColor: 'pink',
     opacity: 0.7,
   },
 });
