@@ -1,5 +1,6 @@
 import React, {useState, useLayoutEffect, useEffect } from 'react';
 import { View, Text, StyleSheet, Button, Platform } from 'react-native';
+import PressableButton from './PressableButton';
 
 export default function GoalDetails ({ route, navigation }) {
   const { goal, moreDetails } = route.params;
@@ -14,11 +15,11 @@ export default function GoalDetails ({ route, navigation }) {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <Button
-          title="Warning"
-          onPress={handleWarning}
-          color={Platform.OS === 'android' ? 'purple' : 'white'} 
-        />
+        <PressableButton onPress={handleWarning} style={{ backgroundColor: 'purple' }}>
+          <Text style={{ color: 'white' }}>
+            Warning
+          </Text>
+        </PressableButton>
       ),
     });
   }, [navigation]);
