@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import PressableButton from './PressableButton';
 import { FontAwesome } from '@expo/vector-icons';
 
-export default function GoalItem ({ goal, onDelete }) {
+export default function GoalItem ({ goal, onDelete, onInfoPress, onPressIn, onPressOut }) {
 
   const navigation = useNavigation();
 
@@ -27,9 +27,10 @@ export default function GoalItem ({ goal, onDelete }) {
 
   return (
     <Pressable
-      onPress={() => navigation.navigate('Details', { goal })}
+      onPress={() => onInfoPress(goal)}
       onLongPress={handleLongPress}
-      android_ripple={{ color: 'pink' }} 
+      onPressIn={onPressIn} 
+      onPressOut={onPressOut} 
       style={({ pressed }) => [
         styles.goalItemContainer,
         pressed && styles.pressedItem,
