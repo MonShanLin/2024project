@@ -4,6 +4,7 @@ import Header from './Header';
 import Input from './Input';
 import GoalItem from './GoalItem';
 import { useState } from 'react';
+import PressableButton from './PressableButton';
 
 export default function Home({ navigation }) {
   const appName = "Phoebe's app!"; 
@@ -56,7 +57,9 @@ export default function Home({ navigation }) {
 
       <View style={styles.topView}>
         <Header name={appName}/>
-        <Button title="Add a goal" onPress={() => setIsModalVisible(true)} /> 
+        <PressableButton onPress={() => setIsModalVisible(true)} style={styles.addButton}>
+          <Text style={styles.buttonText}>Add a Goal</Text>
+        </PressableButton>
       </View>
 
       <Input focus={inputFocus} onConfirm={handleInputData} onCancel={handleCancelButton} visible={isModalVisible} />
