@@ -15,6 +15,8 @@ import GoalItem from './GoalItem';
 import { useState, useEffect  } from 'react';
 import PressableButton from './PressableButton';
 import { database } from '../Firebase/firebaseSetup';
+import { deleteFromDB } from '../Firebase/firestoreHelper'; 
+
 
 export default function Home({ navigation }) {
   const appName = "Phoebe's app!";
@@ -37,6 +39,15 @@ export default function Home({ navigation }) {
     return () => unsubscribe();
   }, []); 
 
+  const handleDeleteGoal = async (goalId) => {
+    try {
+      await deleteFromDB(goalId, 'goals');
+      setMultiGoals((prevGoals) => prevGoals.filter((goal) => goal.id !== goalId));
+    } catch (err) {
+      console.error("Error deleting goal: ", err);
+    }
+  };
+
   const handleInputData = (text) => {
     setMultiGoals((prevGoals) => [
       ...prevGoals,
@@ -45,11 +56,6 @@ export default function Home({ navigation }) {
     setIsModalVisible(false);
   };
 
-  const handleDeleteGoal = (goalId) => {
-    setMultiGoals((prevGoals) =>
-      prevGoals.filter((goal) => goal.id !== goalId)
-    );
-  };
 
   const handleDeleteAll = () => {
     Alert.alert('Delete All', 'Do you want to delete all?', [
