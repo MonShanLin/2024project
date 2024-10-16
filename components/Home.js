@@ -23,18 +23,17 @@ export default function Home({ navigation }) {
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(collection(database, "goals"), (querySnapshot) => {
-      if (!querySnapshot.empty) {
-        const updatedGoals = [];
-        querySnapshot.forEach((doc) => {
-          updatedGoals.push({ ...doc.data(), id: doc.id });
-        });
-        setMultiGoals(updatedGoals); 
-      } else {
-        setMultiGoals([]); 
-      }
+    const unsubscribe = onSnapshot(collection(database, 'goals'), (querySnapshot) => {
+      let goalsArray = [];
+
+      querySnapshot.forEach((docSnapshot) => {
+        goalsArray.push({ ...docSnapshot.data(), id: docSnapshot.id });
+      });
+
+      setMultiGoals(goalsArray); 
     });
 
+  
     return () => unsubscribe();
   }, []); 
 
