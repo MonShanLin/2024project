@@ -8,17 +8,35 @@ import {
   FlatList,
   Alert,
 } from 'react-native';
+import { collection, onSnapshot } from 'firebase/firestore';
 import Header from './Header';
 import Input from './Input';
 import GoalItem from './GoalItem';
-import { useState } from 'react';
+import { useState, useEffect  } from 'react';
 import PressableButton from './PressableButton';
+import { database } from '../Firebase/firebaseSetup';
 
 export default function Home({ navigation }) {
   const appName = "Phoebe's app!";
   const inputFocus = true;
   const [multiGoals, setMultiGoals] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(collection(database, "goals"), (querySnapshot) => {
+      if (!querySnapshot.empty) {
+        const updatedGoals = [];
+        querySnapshot.forEach((doc) => {
+          updatedGoals.push({ ...doc.data(), id: doc.id });
+        });
+        setMultiGoals(updatedGoals); 
+      } else {
+        setMultiGoals([]); 
+      }
+    });
+
+    return () => unsubscribe();
+  }, []); 
 
   const handleInputData = (text) => {
     setMultiGoals((prevGoals) => [
