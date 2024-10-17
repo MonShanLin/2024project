@@ -2,22 +2,29 @@ import React, {useState, useLayoutEffect, useEffect } from 'react';
 import { View, Text, StyleSheet, Button, Platform } from 'react-native';
 import PressableButton from './PressableButton';
 import { FontAwesome } from '@expo/vector-icons';
+import { updateDB } from '../Firebase/firestoreHelper'; 
+
 
 export default function GoalDetails ({ route, navigation }) {
   const { goal, moreDetails } = route.params;
   const [textColor, setTextColor] = useState(route.params.textColor ||'black');
 
-  const handleWarning = () => {
+  const warningHandler = async () => {
     setTextColor('red');
-    navigation.setParams({ textColor: 'red' });
-    navigation.setOptions({ title: 'Warning!' });
+    navigation.setOptions({
+      title: 'Warning!'
+    });
+    
+      updateDB(goal.id, { warning: true }, 'goals');
+      console.log('Warning set for goal:', goal.id);
   };
 
+ 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <PressableButton onPress={handleWarning} style={{ backgroundColor: 'transparent' }}>
-          <FontAwesome name="exclamation-triangle" size={24} color={ 'white'} />
+        <PressableButton onPress={warningHandler} style={{ backgroundColor: 'transparent' }}>
+        <FontAwesome name="exclamation-triangle" size={24} color={'white'} />
         </PressableButton>
       ),
     });
