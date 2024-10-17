@@ -23,17 +23,17 @@ export default function Home({ navigation }) {
   const [multiGoals, setMultiGoals] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
-    useEffect(() => {
-      onSnapshot(collection(database, 'goals'), (querySnapshot) => {
-        let goalsArray = [];
-        querySnapshot.forEach((docSnapshot) => {
-          goalsArray.push({ ...docSnapshot.data(), id: docSnapshot.id });
-        });
-        setMultiGoals(goalsArray);
+  useEffect(() => {
+    const unsubscribe = onSnapshot(collection(database, 'goals'), (querySnapshot) => {
+      let goalsArray = [];
+      querySnapshot.forEach((docSnapshot) => {
+        goalsArray.push({ ...docSnapshot.data(), id: docSnapshot.id });
       });
+      setMultiGoals(goalsArray);
+    });  
+    return () => unsubscribe();
+  }, []);
   
-       
-    }, []);
   
     const handleInputData = async (text) => {
         writeToDB({ text }, 'goals');
