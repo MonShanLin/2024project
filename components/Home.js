@@ -15,8 +15,7 @@ import GoalItem from './GoalItem';
 import { useState, useEffect  } from 'react';
 import PressableButton from './PressableButton';
 import { database } from '../Firebase/firebaseSetup';
-import { deleteFromDB } from '../Firebase/firestoreHelper'; 
-
+import { writeToDB, deleteFromDB, deleteAllFromDB } from '../Firebase/firestoreHelper';
 
 export default function Home({ navigation }) {
   const appName = "Phoebe's app!";
@@ -24,61 +23,51 @@ export default function Home({ navigation }) {
   const [multiGoals, setMultiGoals] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
-  useEffect(() => {
-    const unsubscribe = onSnapshot(collection(database, 'goals'), (querySnapshot) => {
-      let goalsArray = [];
-
-      querySnapshot.forEach((docSnapshot) => {
-        goalsArray.push({ ...docSnapshot.data(), id: docSnapshot.id });
+    useEffect(() => {
+      onSnapshot(collection(database, 'goals'), (querySnapshot) => {
+        let goalsArray = [];
+        querySnapshot.forEach((docSnapshot) => {
+          goalsArray.push({ ...docSnapshot.data(), id: docSnapshot.id });
+        });
+        setMultiGoals(goalsArray);
       });
-
-      setMultiGoals(goalsArray); 
-    });
-
   
-    return () => unsubscribe();
-  }, []); 
-
-  const handleDeleteGoal = async (goalId) => {
-    try {
-      await deleteFromDB(goalId, 'goals');
-      setMultiGoals((prevGoals) => prevGoals.filter((goal) => goal.id !== goalId));
-    } catch (err) {
-      console.error("Error deleting goal: ", err);
-    }
-  };
-
-  const handleInputData = (text) => {
-    setMultiGoals((prevGoals) => [
-      ...prevGoals,
-      { text: text, id: Math.random().toString() },
-    ]);
-    setIsModalVisible(false);
-  };
-
-
-  const handleDeleteAll = () => {
-    Alert.alert('Delete All', 'Do you want to delete all?', [
-      {
-        text: 'No',
-        style: 'cancel',
-      },
-      {
-        text: 'Yes',
-        onPress: () => {
-          setMultiGoals([]);
+       
+    }, []);
+  
+    const handleInputData = async (text) => {
+        writeToDB({ text }, 'goals');
+        setIsModalVisible(false); 
+    };
+  
+    const handleDeleteGoal = async (goalId) => {
+        deleteFromDB(goalId, 'goals');
+        setMultiGoals((prevGoals) => prevGoals.filter((goal) => goal.id !== goalId));
+    };
+  
+    const handleDeleteAll = () => {
+      Alert.alert('Delete All', 'Do you want to delete all?', [
+        {
+          text: 'No',
+          style: 'cancel',
         },
-      },
-    ]);
-  };
-
-  const handleCancelButton = () => {
-    setIsModalVisible(false);
-  };
-
-  const navigateToGoalDetails = (goal) => {
-    navigation.navigate('Details', { goal });
-  };
+        {
+          text: 'Yes',
+          onPress: async () => {
+              deleteAllFromDB('goals');
+              setMultiGoals([]);
+          },
+        },
+      ]);
+    };
+  
+    const handleCancelButton = () => {
+      setIsModalVisible(false);
+    };
+  
+    const navigateToGoalDetails = (goal) => {
+      navigation.navigate('Details', { goal });
+    };
 
   return (
     <SafeAreaView style={styles.container}>
