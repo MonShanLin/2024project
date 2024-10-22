@@ -44,8 +44,6 @@ export default function GoalDetails ({ route, navigation }) {
             You are seeing the details of the goal with text: {goal.text} and id: {goal.id}
           </Text> 
 
-          <GoalUsers />
-          
           <Button
             title="More details"
             onPress={() => navigation.push('Details', { goal,moreDetails: true  })} 
@@ -63,6 +61,7 @@ export default function GoalDetails ({ route, navigation }) {
           />
         </>
         )}
+            <GoalUsers goalId={goal.id} />
     </View>
   );
 };
