@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Button, Platform } from 'react-native';
 import PressableButton from './PressableButton';
 import { FontAwesome } from '@expo/vector-icons';
 import { updateDB } from '../Firebase/firestoreHelper'; 
-
+import GoalUsers from './GoalUsers';
 
 export default function GoalDetails ({ route, navigation }) {
   const { goal, moreDetails } = route.params;
@@ -44,6 +44,8 @@ export default function GoalDetails ({ route, navigation }) {
             You are seeing the details of the goal with text: {goal.text} and id: {goal.id}
           </Text> 
 
+          <GoalUsers />
+          
           <Button
             title="More details"
             onPress={() => navigation.push('Details', { goal,moreDetails: true  })} 
