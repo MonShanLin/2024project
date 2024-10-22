@@ -3,7 +3,7 @@
     "name": "2024project",
     "slug": "2024project",
     "version": "1.0.0",
-    "orientation": "portrait",
+    "orientation": "default",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
