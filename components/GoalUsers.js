@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, Alert } from 'react-native';
-import { writeUsersToSubcollection, getUsersFromSubcollection } from '../Firebase/firestoreHelper';
+import { View, Text, StyleSheet, FlatList, Alert, Button } from 'react-native';
 
 export default function GoalUsers({ goalId }) {
   const [users, setUsers] = useState([]);
@@ -9,20 +8,12 @@ export default function GoalUsers({ goalId }) {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const existingUsers = await getUsersFromSubcollection(goalId);
-
-        if (existingUsers.length > 0) {
-          setUsers(existingUsers);
-        } else {
-          const response = await fetch('https://jsonplaceholder.typicode.com/users');
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-
-          const data = await response.json();
-          setUsers(data);
-          await writeUsersToSubcollection(goalId, data);
+        const response = await fetch('https://jsonplaceholder.typicode.com/users');
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
         }
+        const data = await response.json();
+        setUsers(data);
       } catch (error) {
         console.error('Error fetching users:', error);
         Alert.alert('Error', 'Failed to load users data.');
@@ -33,6 +24,33 @@ export default function GoalUsers({ goalId }) {
 
     fetchUsers();
   }, [goalId]);
+
+  const handlePostRequest = async () => {
+    const fakeUser = {
+      name: 'New User',
+    };
+
+    try {
+      const response = await fetch('https://jsonplaceholder.typicode.com/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(fakeUser),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to POST data, status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      Alert.alert('Success', `User added with ID: ${data.id}`);
+      console.log('POST Response:', data);
+    } catch (error) {
+      console.error('Error with POST request:', error);
+      Alert.alert('Error', 'Failed to add user.');
+    }
+  };
 
   if (loading) {
     return (
@@ -54,6 +72,7 @@ export default function GoalUsers({ goalId }) {
           </View>
         )}
       />
+      <Button title="Add Fake User" onPress={handlePostRequest} />
     </View>
   );
 }
