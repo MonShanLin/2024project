@@ -1,4 +1,4 @@
-import { collection, addDoc, doc, deleteDoc, getDocs, query } from "firebase/firestore"; 
+import { collection, addDoc, doc, deleteDoc, getDocs,  QuerySnapshot } from "firebase/firestore"; 
 import { database } from "./firebaseSetup";
 
 export async function writeToDB(data, collectionName) {
@@ -58,5 +58,23 @@ export async function getUsersFromSubcollection(goalId) {
     } catch (err) {
         console.error('Error fetching users from subcollection:', err);
         return [];
+    }
+}
+
+export async function getAllDocuments(collectionName) {
+    try {
+        const querySnapshot = await getDocs(collection(database, collectionName));
+        const data = [];
+        if (querySnapshot.empty) {
+            console.log("No documents found in ", collectionName);
+            return data;
+        }
+        querySnapshot.forEach((docSnapshot) => {
+            data.push(docSnapshot.data());
+        });
+        return data;
+    }
+    catch (err) {
+        console.log("get all documents error", err);
     }
 }
