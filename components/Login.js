@@ -1,44 +1,76 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Button, Alert, StyleSheet } from 'react-native';
+import { auth } from '../Firebase/firebaseSetup'; // Importing Auth instance
+import { signInWithEmailAndPassword } from 'firebase/auth'; // Importing Firebase function
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const handleLogin = async () => {
+    try {
+      // Firebase function to sign in with email and password
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      console.log('User logged in:', user);
+
+      Alert.alert('Success', 'Logged in successfully!');
+      // Navigate to the Home screen or any other screen after login
+      navigation.navigate('Home');
+    } catch (error) {
+      console.error('Error during login:', error);
+      Alert.alert('Login Error', error.message); // Display error message
+    }
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
-
-      <Text style={styles.label}>Email Address</Text>
+      <Text style={styles.header}>Login</Text>
       <TextInput
-        style={styles.input}
-        placeholder="Email"
+        placeholder="Email Address"
         value={email}
-        onChangeText={setEmail}
-      />
-
-      <Text style={styles.label}>Password</Text>
-      <TextInput
+        onChangeText={(text) => setEmail(text)}
         style={styles.input}
+        keyboardType="email-address"
+      />
+      <TextInput
         placeholder="Password"
         value={password}
-        onChangeText={setPassword}
+        onChangeText={(text) => setPassword(text)}
+        style={styles.input}
         secureTextEntry
       />
+      <Button title="Log In" onPress={handleLogin} />
 
-      <Button title="Log In" onPress={() => { /* Handle login */ }} />
-
-      <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
-        <Text style={styles.link}>New User? Create an account</Text>
-      </TouchableOpacity>
+      <Text style={styles.switchText} onPress={() => navigation.navigate('Signup')}>
+        New User? Create an account
+      </Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20, backgroundColor: '#fff' },
-  title: { fontSize: 24, textAlign: 'center', marginBottom: 20, color: 'purple' },
-  label: { fontSize: 16, marginVertical: 5 },
-  input: { borderWidth: 1, borderColor: 'gray', padding: 10, marginBottom: 15 },
-  link: { color: 'blue', marginTop: 15, textAlign: 'center' },
+  container: {
+    flex: 1,
+    padding: 20,
+    justifyContent: 'center',
+  },
+  header: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  input: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginBottom: 12,
+    paddingHorizontal: 10,
+  },
+  switchText: {
+    color: 'blue',
+    marginTop: 15,
+    textAlign: 'center',
+  },
 });
