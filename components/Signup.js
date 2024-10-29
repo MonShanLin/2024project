@@ -1,54 +1,113 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Button, Alert, StyleSheet } from 'react-native';
+import { auth } from '../Firebase/firebaseSetup'; // Importing Auth instance
+import { createUserWithEmailAndPassword } from 'firebase/auth'; // Importing the Firebase function
 
 export default function Signup({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
+  // Function to validate email format
+  const isValidEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  // Function to validate password requirements
+  const isValidPassword = (password) => {
+    return password.length >= 6; // Ensuring minimum length of 6 characters
+  };
+
+  const handleSignup = async () => {
+    // Check if email is valid
+    if (!isValidEmail(email)) {
+      Alert.alert('Invalid Email', 'Please enter a valid email address.');
+      return;
+    }
+
+    // Check if password meets requirements
+    if (!isValidPassword(password)) {
+      Alert.alert('Weak Password', 'Password must be at least 6 characters long.');
+      return;
+    }
+
+    // Check if passwords match
+    if (password !== confirmPassword) {
+      Alert.alert('Error', 'Passwords do not match.');
+      return;
+    }
+
+    try {
+      // Firebase function to create a user with email and password
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      console.log('User registered:', user);
+
+      Alert.alert('Success', 'User registered successfully!');
+      navigation.navigate('Login'); // Navigate to login after successful signup
+    } catch (error) {
+      console.error('Error during signup:', error);
+      Alert.alert('Signup Error', error.message); // Display error message
+    }
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Signup</Text>
-
-      <Text style={styles.label}>Email Address</Text>
+      <Text style={styles.header}>Signup</Text>
       <TextInput
-        style={styles.input}
-        placeholder="Email"
+        placeholder="Email Address"
         value={email}
-        onChangeText={setEmail}
-      />
-
-      <Text style={styles.label}>Password</Text>
-      <TextInput
+        onChangeText={(text) => setEmail(text)}
         style={styles.input}
+        keyboardType="email-address"
+        autoCapitalize="none"
+      />
+      <TextInput
         placeholder="Password"
         value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
-
-      <Text style={styles.label}>Confirm Password</Text>
-      <TextInput
+        onChangeText={(text) => setPassword(text)}
         style={styles.input}
-        placeholder="Password"
-        value={confirmPassword}
-        onChangeText={setConfirmPassword}
         secureTextEntry
       />
+      <TextInput
+        placeholder="Confirm Password"
+        value={confirmPassword}
+        onChangeText={(text) => setConfirmPassword(text)}
+        style={styles.input}
+        secureTextEntry
+      />
+      <Button title="Register" onPress={handleSignup} />
 
-      <Button title="Register" onPress={() => { /* Handle registration */ }} />
-
-      <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-        <Text style={styles.link}>Already Registered? Login</Text>
-      </TouchableOpacity>
+      <Text style={styles.switchText} onPress={() => navigation.navigate('Login')}>
+        Already Registered? Login
+      </Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20, backgroundColor: '#fff' },
-  title: { fontSize: 24, textAlign: 'center', marginBottom: 20, color: 'purple' },
-  label: { fontSize: 16, marginVertical: 5 },
-  input: { borderWidth: 1, borderColor: 'gray', padding: 10, marginBottom: 15 },
-  link: { color: 'blue', marginTop: 15, textAlign: 'center' },
+  container: {
+    flex: 1,
+    padding: 20,
+    justifyContent: 'center',
+  },
+  header: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  input: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginBottom: 12,
+    paddingHorizontal: 10,
+  },
+  switchText: {
+    color: 'blue',
+    marginTop: 15,
+    textAlign: 'center',
+  },
 });
