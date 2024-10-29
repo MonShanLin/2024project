@@ -3,9 +3,11 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useState, useEffect } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
+import { FontAwesome } from '@expo/vector-icons';
 import { auth } from './Firebase/firebaseSetup';
 import Home from './components/Home';
 import GoalDetails from './components/GoalDetails';
+import Profile from './components/Profile';
 import Login from './components/Login';
 import Signup from './components/Signup';
 
@@ -15,36 +17,16 @@ export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    // Set up the authentication listener
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      console.log('User:', user);
-      if (user) {
-        setIsAuthenticated(true);  // User is signed in
-      } else {
-        setIsAuthenticated(false); // User is signed out
-      }
+      setIsAuthenticated(!!user);
     });
-
-    // Clean up the listener on unmount
     return unsubscribe;
   }, []);
 
   const AuthStack = (
     <>
-      <Stack.Screen
-        name="Login"
-        component={Login}
-        options={{
-          title: 'Login',
-        }}
-      />
-      <Stack.Screen
-        name="Signup"
-        component={Signup}
-        options={{
-          title: 'Signup',
-        }}
-      />
+      <Stack.Screen name="Login" component={Login} options={{ title: 'Login' }} />
+      <Stack.Screen name="Signup" component={Signup} options={{ title: 'Signup' }} />
     </>
   );
 
@@ -53,9 +35,18 @@ export default function App() {
       <Stack.Screen
         name="Home"
         component={Home}
-        options={{
-          title: 'All Goals',
-        }}
+        options={({ navigation }) => ({
+          title: 'All My Goals',
+          headerRight: () => (
+            <FontAwesome
+              name="user"
+              size={24}
+              color="white"
+              onPress={() => navigation.navigate('Profile')}
+              style={{ marginRight: 10 }}
+            />
+          ),
+        })}
       />
       <Stack.Screen
         name="Details"
@@ -64,6 +55,7 @@ export default function App() {
           title: route.params ? route.params.goal.text : 'Goal Details',
         })}
       />
+      <Stack.Screen name="Profile" component={Profile} options={{ title: 'Profile' }} />
     </>
   );
 
