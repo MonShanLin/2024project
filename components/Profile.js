@@ -1,21 +1,40 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, Text, StyleSheet, Alert } from 'react-native';
+import { FontAwesome } from '@expo/vector-icons';
 import { auth } from '../Firebase/firebaseSetup';
+import { signOut } from 'firebase/auth';
 
-export default function Profile() {
-  const [user, setUser] = useState(null);
+export default function Profile({ navigation }) {
+  const currentUser = auth.currentUser;
+
+  // Function to handle sign out
+  const handleSignOut = async () => {
+    try {
+      await signOut(auth);
+      navigation.replace('Login'); // Navigate to Login after signing out
+    } catch (error) {
+      Alert.alert('Error', error.message);
+    }
+  };
 
   useEffect(() => {
-    const currentUser = auth.currentUser;
-    setUser(currentUser);
-  }, []);
-
-  if (!user) return null;
+    navigation.setOptions({
+      headerRight: () => (
+        <FontAwesome
+          name="sign-out"
+          size={24}
+          color="white"
+          onPress={handleSignOut}
+          style={{ marginRight: 15 }}
+        />
+      ),
+    });
+  }, [navigation]);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Email: {user.email}</Text>
-      <Text style={styles.text}>UID: {user.uid}</Text>
+      <Text>{currentUser?.email}</Text>
+      <Text>{currentUser?.uid}</Text>
     </View>
   );
 }
@@ -23,13 +42,8 @@ export default function Profile() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    padding: 20,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f5f5f5',
-  },
-  text: {
-    fontSize: 18,
-    color: 'black',
-    marginVertical: 5,
   },
 });
