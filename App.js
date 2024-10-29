@@ -17,6 +17,7 @@ export default function App() {
   useEffect(() => {
     // Set up the authentication listener
     const unsubscribe = onAuthStateChanged(auth, (user) => {
+      console.log('User:', user);
       if (user) {
         setIsAuthenticated(true);  // User is signed in
       } else {
