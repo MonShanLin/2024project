@@ -1,9 +1,10 @@
 import { collection, addDoc, doc, deleteDoc, getDocs,  QuerySnapshot } from "firebase/firestore"; 
-import { database } from "./firebaseSetup";
+import { auth, database } from "./firebaseSetup";
 
 export async function writeToDB(data, collectionName) {
     try {
-        const docRef = await addDoc(collection(database, collectionName), data);
+        const goal = { ...data, owner: auth.currentUser.uid }; // Ensure `owner` field is added
+        const docRef = await addDoc(collection(database, collectionName), goal);
         console.log("Document written with ID: ", docRef.id);
     } catch (err) {
         console.log("Error writing to Firestore:", err);
@@ -78,3 +79,4 @@ export async function getAllDocuments(collectionName) {
         console.log("get all documents error", err);
     }
 }
+

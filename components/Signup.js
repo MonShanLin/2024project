@@ -45,7 +45,6 @@ export default function Signup({ navigation }) {
       console.log('User registered:', user);
 
       Alert.alert('Success', 'User registered successfully!');
-      navigation.navigate('Login'); // Navigate to login after successful signup
     } catch (error) {
       console.error('Error during signup:', error);
       Alert.alert('Signup Error', error.message); // Display error message
