@@ -1,4 +1,4 @@
-import { collection, addDoc, doc, deleteDoc, getDocs, updateDoc } from "firebase/firestore"; 
+import { collection, addDoc, doc, deleteDoc, getDocs,  QuerySnapshot } from "firebase/firestore"; 
 import { database } from "./firebaseSetup";
 
 export async function writeToDB(data, collectionName) {
@@ -35,12 +35,46 @@ export async function deleteAllFromDB(collectionName) {
     }
 }
 
-export async function updateDB(id, data, collectionName) {
+
+export async function writeUsersToSubcollection(goalId, usersData) {
     try {
-      const docRef = doc(database, collectionName, id);
-      await updateDoc(docRef, data);
-      console.log(`Document with ID ${id} updated successfully.`);
+        const usersCollectionRef = collection(database, `goals/${goalId}/users`);
+        for (const user of usersData) {
+            await addDoc(usersCollectionRef, user);
+        }
+        console.log('Users added to subcollection successfully.');
     } catch (err) {
-      console.error('Error updating document: ', err);
+        console.error('Error writing users to subcollection:', err);
+    }
+}
+
+
+export async function getUsersFromSubcollection(goalId) {
+    try {
+        const usersCollectionRef = collection(database, `goals/${goalId}/users`);
+        const usersSnapshot = await getDocs(usersCollectionRef);
+        const users = usersSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+        return users;
+    } catch (err) {
+        console.error('Error fetching users from subcollection:', err);
+        return [];
+    }
+}
+
+export async function getAllDocuments(collectionName) {
+    try {
+        const querySnapshot = await getDocs(collection(database, collectionName));
+        const data = [];
+        if (querySnapshot.empty) {
+            console.log("No documents found in ", collectionName);
+            return data;
+        }
+        querySnapshot.forEach((docSnapshot) => {
+            data.push(docSnapshot.data());
+        });
+        return data;
+    }
+    catch (err) {
+        console.log("get all documents error", err);
     }
 }

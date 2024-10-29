@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Button, Platform } from 'react-native';
 import PressableButton from './PressableButton';
 import { FontAwesome } from '@expo/vector-icons';
 import { updateDB } from '../Firebase/firestoreHelper'; 
-
+import GoalUsers from './GoalUsers';
 
 export default function GoalDetails ({ route, navigation }) {
   const { goal, moreDetails } = route.params;
@@ -61,6 +61,7 @@ export default function GoalDetails ({ route, navigation }) {
           />
         </>
         )}
+            <GoalUsers goalId={goal.id} />
     </View>
   );
 };
