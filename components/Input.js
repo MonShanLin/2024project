@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { TextInput, Text, Button, View, Modal, StyleSheet, Alert, Image } from 'react-native';
+import ImageManager from './ImageManager';
 
 export default function Input({ focus, onConfirm, onCancel, visible }) {
     const [text, setText] = useState("");
@@ -71,19 +72,24 @@ export default function Input({ focus, onConfirm, onCancel, visible }) {
                 ) : (
                     count < lengthRequired ? <Text style={styles.text}>Please type more than 3 characters</Text> : <Text style={styles.text}>Thank you</Text>
                 )}
-                <View style={styles.buttonHorizontal}>
-                    <View style={styles.buttonContainer}>
-                        <Button title="Confirm" onPress={handleConfirmButton} disabled={count < lengthRequired}/>
-                    </View>
-                    <View style={styles.buttonContainer}>
-                         <Button title="Cancel" onPress={handleCancelButton} />
-                    </View>
+            <ImageManager />
+
+            <View style={styles.buttonHorizontal}>
+                <View style={styles.buttonContainer}>
+                 <Button title="Confirm" onPress={handleConfirmButton} disabled={count < lengthRequired} />
                 </View>
-            </View>
-            </View>
-        </Modal>
-    );
+                <View style={styles.buttonContainer}>
+                <Button title="Cancel" onPress={handleCancelButton} />
+                </View>
+             </View>
+         </View>
+         </View>
+     </Modal>
+  );
 }
+
+     
+                
 
 const styles = StyleSheet.create({
     container: {
