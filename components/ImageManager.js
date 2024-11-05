@@ -6,18 +6,25 @@ export default function ImageManager() {
   const [selectedImage, setSelectedImage] = useState(null);
   const [hasCameraPermission, setHasCameraPermission] = useState(false);
 
-  useEffect(() => {
-    // Request camera permission
-    const requestPermission = async () => {
-      const { status } = await ImagePicker.requestCameraPermissionsAsync();
-      setHasCameraPermission(status === 'granted');
-    };
-    
-    requestPermission();
-  }, []);
+  // Function to request camera permissions
+  const requestPermission = async () => {
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+    setHasCameraPermission(status === 'granted');
+    return status === 'granted';
+  };
 
+  // Function to verify if permissions are granted
+  const verifyPermissions = async () => {
+    if (hasCameraPermission) {
+      return true;
+    }
+    return await requestPermission();
+  };
+
+  // Function to handle taking an image
   const takeImageHandler = async () => {
-    if (!hasCameraPermission) {
+    const hasPermission = await verifyPermissions();
+    if (!hasPermission) {
       Alert.alert('Permission Denied', 'Camera permission is required to take photos.');
       return;
     }
@@ -28,6 +35,7 @@ export default function ImageManager() {
         aspect: [4, 3],
         quality: 1,
       });
+      console.log(result);
 
       if (!result.canceled) {
         setSelectedImage(result.assets[0].uri);
