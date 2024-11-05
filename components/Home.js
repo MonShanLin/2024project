@@ -1,20 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
-import {
-  StyleSheet,
-  Text,
-  View,
-  Button,
-  SafeAreaView,
-  FlatList,
-  Alert,
-} from 'react-native';
-import { collection, onSnapshot } from 'firebase/firestore';
+import { StyleSheet, Text, View, Button, SafeAreaView,  FlatList, Alert } from 'react-native';
+import { query, collection, where, onSnapshot } from 'firebase/firestore';
 import Header from './Header';
 import Input from './Input';
 import GoalItem from './GoalItem';
-import { useState, useEffect  } from 'react';
+import { useState, useEffect } from 'react';
 import PressableButton from './PressableButton';
-import { database } from '../Firebase/firebaseSetup';
+import { auth, database } from '../Firebase/firebaseSetup';
 import { writeToDB, deleteFromDB, deleteAllFromDB } from '../Firebase/firestoreHelper';
 
 export default function Home({ navigation }) {
@@ -24,50 +16,78 @@ export default function Home({ navigation }) {
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(collection(database, 'goals'), (querySnapshot) => {
-      let goalsArray = [];
-      querySnapshot.forEach((docSnapshot) => {
-        goalsArray.push({ ...docSnapshot.data(), id: docSnapshot.id });
-      });
-      setMultiGoals(goalsArray);
-    });  
+    if (!auth.currentUser) return;
+
+    // Define a query to fetch only documents owned by the current user
+    const userGoalsQuery = query(
+      collection(database, 'goals'),
+      where('owner', '==', auth.currentUser.uid)
+    );
+
+    // Set up the onSnapshot listener with error handling for permission issues
+    const unsubscribe = onSnapshot(
+      userGoalsQuery,
+      (querySnapshot) => {
+        let goalsArray = [];
+        querySnapshot.forEach((docSnapshot) => {
+          goalsArray.push({ ...docSnapshot.data(), id: docSnapshot.id });
+        });
+        setMultiGoals(goalsArray);
+      },
+      (error) => {
+        console.error("Error fetching goals: ", error.message);
+        Alert.alert("Permission Denied", "You do not have access to these goals.");
+      }
+    );
+
     return () => unsubscribe();
   }, []);
-  
-  
-    const handleInputData = async (text) => {
-        writeToDB({ text }, 'goals');
-        setIsModalVisible(false); 
-    };
-  
-    const handleDeleteGoal = async (goalId) => {
-        deleteFromDB(goalId, 'goals');
-        setMultiGoals((prevGoals) => prevGoals.filter((goal) => goal.id !== goalId));
-    };
-  
-    const handleDeleteAll = () => {
-      Alert.alert('Delete All', 'Do you want to delete all?', [
-        {
-          text: 'No',
-          style: 'cancel',
-        },
-        {
-          text: 'Yes',
-          onPress: async () => {
-              deleteAllFromDB('goals');
-              setMultiGoals([]);
-          },
-        },
-      ]);
-    };
-  
-    const handleCancelButton = () => {
+
+  const handleInputData = async (text) => {
+    try {
+      await writeToDB({ text }, 'goals');
       setIsModalVisible(false);
-    };
-  
-    const navigateToGoalDetails = (goal) => {
-      navigation.navigate('Details', { goal });
-    };
+    } catch (error) {
+      console.error("Error adding goal: ", error);
+    }
+  };
+
+  const handleDeleteGoal = async (goalId) => {
+    try {
+      await deleteFromDB(goalId, 'goals');
+      setMultiGoals((prevGoals) => prevGoals.filter((goal) => goal.id !== goalId));
+    } catch (error) {
+      console.error("Error deleting goal: ", error);
+    }
+  };
+
+  const handleDeleteAll = () => {
+    Alert.alert('Delete All', 'Do you want to delete all?', [
+      {
+        text: 'No',
+        style: 'cancel',
+      },
+      {
+        text: 'Yes',
+        onPress: async () => {
+          try {
+            await deleteAllFromDB('goals');
+            setMultiGoals([]);
+          } catch (error) {
+            console.error("Error deleting all goals: ", error);
+          }
+        },
+      },
+    ]);
+  };
+
+  const handleCancelButton = () => {
+    setIsModalVisible(false);
+  };
+
+  const navigateToGoalDetails = (goal) => {
+    navigation.navigate('Details', { goal });
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -92,16 +112,16 @@ export default function Home({ navigation }) {
 
       <View style={styles.bottomView}>
         <FlatList
-                 ItemSeparatorComponent={({ highlighted }) => (
-                  <View
-                    style={[
-                      styles.separator,
-                      highlighted && styles.highlightedSeparator,
-                    ]}
-                  />
-                )}
+          ItemSeparatorComponent={({ highlighted }) => (
+            <View
+              style={[
+                styles.separator,
+                highlighted && styles.highlightedSeparator,
+              ]}
+            />
+          )}
           data={multiGoals}
-          renderItem={({ item, separators  }) => (
+          renderItem={({ item, separators }) => (
             <GoalItem
               goal={item}
               onDelete={handleDeleteGoal}
@@ -127,7 +147,6 @@ export default function Home({ navigation }) {
               </View>
             ) : null
           }
- 
         />
       </View>
     </SafeAreaView>
