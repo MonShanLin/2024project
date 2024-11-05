@@ -1,13 +1,16 @@
 import React, {useState, useLayoutEffect, useEffect } from 'react';
-import { View, Text, StyleSheet, Button, Platform } from 'react-native';
+import { View, Text, StyleSheet, Button, Image } from 'react-native';
 import PressableButton from './PressableButton';
 import { FontAwesome } from '@expo/vector-icons';
 import { updateDB } from '../Firebase/firestoreHelper'; 
 import GoalUsers from './GoalUsers';
+import { storage } from '../Firebase/firebaseSetup';
+import { getDownloadURL, ref } from 'firebase/storage';
 
 export default function GoalDetails ({ route, navigation }) {
   const { goal, moreDetails } = route.params;
   const [textColor, setTextColor] = useState(route.params.textColor ||'black');
+  const [imageUrl, setImageUrl] = useState(null);
 
   const warningHandler = async () => {
     setTextColor('red');
@@ -31,10 +34,20 @@ export default function GoalDetails ({ route, navigation }) {
   }, [navigation]);
 
   useEffect(() => {
-    if (route.params?.textColor) {
-      setTextColor(route.params.textColor);
-    }
-  }, [route.params?.textColor]);
+    const fetchImageUrl = async () => {
+      if (goal.imageUri) {
+        try {
+          const imageRef = ref(storage, goal.imageUri);
+          const url = await getDownloadURL(imageRef);
+          setImageUrl(url);
+        } catch (error) {
+          console.error("Error fetching image URL:", error);
+        }
+      }
+    };
+
+    fetchImageUrl();
+  }, [goal.imageUri]);
 
   return (
     <View style={styles.container}>
@@ -61,10 +74,16 @@ export default function GoalDetails ({ route, navigation }) {
           />
         </>
         )}
-            <GoalUsers goalId={goal.id} />
+
+      {imageUrl && (
+        <Image source={{ uri: imageUrl }} style={styles.image} />
+      )}
+      
+      <GoalUsers goalId={goal.id} />
     </View>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {
@@ -82,4 +101,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: 'black',
     },
+
+    image: {
+      width: 200,
+      height: 200,
+      borderRadius: 10,
+      marginVertical: 20,
+    },
+
 });

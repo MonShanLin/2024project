@@ -76,7 +76,6 @@ export default function Input({ focus, onConfirm, onCancel, visible }) {
                 ) : (
                     count < lengthRequired ? <Text style={styles.text}>Please type more than 3 characters</Text> : <Text style={styles.text}>Thank you</Text>
                 )}
-          {/* Render ImageManager Component */}
           <ImageManager onImageTaken={(uri) => setImageUri(uri)} />
 
           <View style={styles.buttonHorizontal}>
