@@ -8,6 +8,8 @@ import { useState, useEffect } from 'react';
 import PressableButton from './PressableButton';
 import { auth, database } from '../Firebase/firebaseSetup';
 import { writeToDB, deleteFromDB, deleteAllFromDB } from '../Firebase/firestoreHelper';
+import { ref, uploadBytesResumable } from 'firebase/storage'; // Import storage functions
+import { storage } from '../Firebase/firebaseSetup';
 
 export default function Home({ navigation }) {
   const appName = "Phoebe's app!";
@@ -43,14 +45,43 @@ export default function Home({ navigation }) {
     return () => unsubscribe();
   }, []);
 
-  const handleInputData = async (text) => {
+  const uploadImageToStorage = async (uri) => {
+    const imageName = uri.substring(uri.lastIndexOf('/') + 1);
+    const imageRef = ref(storage, `images/${imageName}`);
+  
     try {
-      await writeToDB({ text }, 'goals');
-      setIsModalVisible(false);
+      const response = await fetch(uri);
+      const blob = await response.blob();
+      
+      const uploadResult = await uploadBytesResumable(imageRef, blob);
+      return uploadResult.metadata.fullPath; // Return the image path for Firestore
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      Alert.alert("Upload Error", "Failed to upload image.");
+      return null;
+    }
+  };
+
+  const handleInputData = async ({ text, imageUri }) => {
+    if (!text) {
+      Alert.alert("Invalid Input", "Please enter text for the goal.");
+      return;
+    }
+
+    let imagePath = null;
+
+    if (imageUri) {
+      imagePath = await uploadImageToStorage(imageUri); // Upload image if there's a URI
+    }
+
+    try {
+      await writeToDB({ text, imageUri: imagePath }, 'goals'); // Save text and image path
+      setIsModalVisible(false); // Close the modal
     } catch (error) {
       console.error("Error adding goal: ", error);
     }
   };
+  
 
   const handleDeleteGoal = async (goalId) => {
     try {

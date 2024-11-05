@@ -1,31 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, Button, Image, StyleSheet, Alert } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 
-export default function ImageManager() {
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [hasCameraPermission, setHasCameraPermission] = useState(false);
+export default function ImageManager({ onImageTaken }) {
+  const [selectedImageUri, setSelectedImageUri] = useState(null);
+  const [permissionResponse, requestPermission] = ImagePicker.useCameraPermissions();
 
-  // Function to request camera permissions
-  const requestPermission = async () => {
-    const { status } = await ImagePicker.requestCameraPermissionsAsync();
-    setHasCameraPermission(status === 'granted');
-    return status === 'granted';
-  };
-
-  // Function to verify if permissions are granted
-  const verifyPermissions = async () => {
-    if (hasCameraPermission) {
+  const verifyPermission = async () => {
+    if (permissionResponse.granted) {
       return true;
     }
-    return await requestPermission();
+    const result = await requestPermission();
+    return result.granted;
   };
 
-  // Function to handle taking an image
   const takeImageHandler = async () => {
-    const hasPermission = await verifyPermissions();
+    const hasPermission = await verifyPermission();
     if (!hasPermission) {
-      Alert.alert('Permission Denied', 'Camera permission is required to take photos.');
+      Alert.alert('Permission Required', 'Camera permission is needed to take photos.');
       return;
     }
 
@@ -35,10 +27,11 @@ export default function ImageManager() {
         aspect: [4, 3],
         quality: 1,
       });
-      console.log(result);
 
-      if (!result.canceled) {
-        setSelectedImage(result.assets[0].uri);
+      if (!result.canceled && result.assets && result.assets.length > 0) {
+        const uri = result.assets[0].uri;
+        setSelectedImageUri(uri);
+        onImageTaken(uri); // Pass URI to parent component
       }
     } catch (err) {
       console.error('Error accessing camera:', err);
@@ -49,7 +42,9 @@ export default function ImageManager() {
   return (
     <View style={styles.container}>
       <Button title="Take Photo" onPress={takeImageHandler} />
-      {selectedImage && <Image source={{ uri: selectedImage }} style={styles.image} />}
+      {selectedImageUri && (
+        <Image source={{ uri: selectedImageUri }} style={styles.image} />
+      )}
     </View>
   );
 }
@@ -60,8 +55,9 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   image: {
-    width: 100,
-    height: 100,
+    width: 200,
+    height: 200,
     marginTop: 10,
+    borderRadius: 10,
   },
 });

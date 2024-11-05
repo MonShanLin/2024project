@@ -7,12 +7,15 @@ export default function Input({ focus, onConfirm, onCancel, visible }) {
     const [count, setCount] = useState(0);
     const [isFocused, setIsFocused] = useState(focus);
     const lengthRequired = 3; 
+    const [imageUri, setImageUri] = useState(null); // State to store image URI
+
 
     const handleConfirmButton = () => {
         console.log(text);  
-        onConfirm(text);
+        onConfirm({ text, imageUri });
         setText("");
         setCount(0);
+        setImageUri(null); // Reset image URI
     };
 
     const handleCancelButton = () => {
@@ -25,6 +28,7 @@ export default function Input({ focus, onConfirm, onCancel, visible }) {
                     onCancel();
                     setText("");
                     setCount(0);
+                    setImageUri(null); // Reset image URI
                 }},
             ],
             { cancelable: true }
@@ -72,24 +76,22 @@ export default function Input({ focus, onConfirm, onCancel, visible }) {
                 ) : (
                     count < lengthRequired ? <Text style={styles.text}>Please type more than 3 characters</Text> : <Text style={styles.text}>Thank you</Text>
                 )}
-            <ImageManager />
+          {/* Render ImageManager Component */}
+          <ImageManager onImageTaken={(uri) => setImageUri(uri)} />
 
-            <View style={styles.buttonHorizontal}>
-                <View style={styles.buttonContainer}>
-                 <Button title="Confirm" onPress={handleConfirmButton} disabled={count < lengthRequired} />
-                </View>
-                <View style={styles.buttonContainer}>
-                <Button title="Cancel" onPress={handleCancelButton} />
-                </View>
-             </View>
-         </View>
-         </View>
-     </Modal>
+          <View style={styles.buttonHorizontal}>
+            <View style={styles.buttonContainer}>
+              <Button title="Confirm" onPress={handleConfirmButton} disabled={count < lengthRequired} />
+            </View>
+            <View style={styles.buttonContainer}>
+              <Button title="Cancel" onPress={handleCancelButton} />
+            </View>
+          </View>
+        </View>
+      </View>
+    </Modal>
   );
 }
-
-     
-                
 
 const styles = StyleSheet.create({
     container: {
