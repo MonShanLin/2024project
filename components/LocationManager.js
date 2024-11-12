@@ -3,8 +3,6 @@ import { View, Button, Image, Text, StyleSheet, Alert } from 'react-native';
 import * as Location from 'expo-location';
 import { useNavigation } from '@react-navigation/native';
 
-const GOOGLE_MAPS_API_KEY = "AIzaSyDUek3GBIBdIU5NKdcInNPC5huDxCXv7_U";
-
 export default function LocationManager() {
   const [location, setLocation] = useState(null);
   const [permissionResponse, requestPermission] = Location.useForegroundPermissions();
