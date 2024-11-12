@@ -15,8 +15,7 @@ export default function Login({ navigation }) {
       console.log('User logged in:', user);
 
       Alert.alert('Success', 'Logged in successfully!');
-      // Navigate to the Home screen or any other screen after login
-      // navigation.navigate('Home');
+      navigation.navigate('Home');
     } catch (error) {
       console.error('Error during login:', error);
       Alert.alert('Login Error', error.message); // Display error message
