@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, Alert } from 'react-native';
+import { View, Text, StyleSheet, Alert} from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { auth } from '../Firebase/firebaseSetup';
 import { signOut } from 'firebase/auth';
+import LocationManager from './LocationManager';
 
 export default function Profile({ navigation }) {
   const currentUser = auth.currentUser;
@@ -35,6 +36,7 @@ export default function Profile({ navigation }) {
     <View style={styles.container}>
       <Text>{currentUser?.email}</Text>
       <Text>{currentUser?.uid}</Text>
+      <LocationManager />
     </View>
   );
 }
