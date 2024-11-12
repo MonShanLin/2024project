@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { View, Button, Text, StyleSheet, Alert } from 'react-native';
+import { View, Button, Image, Text, StyleSheet, Alert } from 'react-native';
 import * as Location from 'expo-location';
 
 export default function LocationManager() {
   const [location, setLocation] = useState(null);
   const [permissionResponse, requestPermission] = Location.useForegroundPermissions();
 
-  // Function to check permissions
   const verifyPermission = async () => {
     if (permissionResponse?.granted) {
       return true;
@@ -22,30 +21,36 @@ export default function LocationManager() {
   };
 
   const locateUserHandler = async () => {
-    // Verify permissions before attempting to get the location
     const hasPermission = await verifyPermission();
     if (!hasPermission) {
       return;
     }
 
     try {
-      // Get the current location
       const userLocation = await Location.getCurrentPositionAsync();
-      setLocation(userLocation);
+      setLocation({
+        latitude: userLocation.coords.latitude,
+        longitude: userLocation.coords.longitude
+      });
     } catch (err) {
       console.error('Error fetching location:', err);
       Alert.alert('Error', 'Unable to fetch location.');
     }
   };
 
+  const mapUrl = location ? 
+    `https://maps.googleapis.com/maps/api/staticmap?center=${location.latitude},${location.longitude}&zoom=14&size=400x200&maptype=roadmap&markers=color:red%7Clabel:L%7C${location.latitude},${location.longitude}&key=${process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY}` 
+    : null;
+
   return (
     <View style={styles.container}>
       <Button title="Locate Me" onPress={locateUserHandler} />
       {location && (
-        <View style={styles.locationContainer}>
-          <Text>Latitude: {location.coords.latitude}</Text>
-          <Text>Longitude: {location.coords.longitude}</Text>
-        </View>
+        <>
+          <Text>Latitude: {location.latitude}</Text>
+          <Text>Longitude: {location.longitude}</Text>
+          <Image source={{ uri: mapUrl }} style={styles.mapImage} />
+        </>
       )}
     </View>
   );
@@ -53,11 +58,12 @@ export default function LocationManager() {
 
 const styles = StyleSheet.create({
   container: {
-    marginVertical: 20,
     alignItems: 'center',
+    marginVertical: 10,
   },
-  locationContainer: {
+  mapImage: {
+    width: 400,
+    height: 200,
     marginTop: 10,
-    alignItems: 'center',
   },
 });
