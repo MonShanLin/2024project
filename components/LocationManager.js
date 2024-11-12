@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import { View, Button, Image, Text, StyleSheet, Alert } from 'react-native';
 import * as Location from 'expo-location';
+import { useNavigation } from '@react-navigation/native';
+
+const GOOGLE_MAPS_API_KEY = "AIzaSyDUek3GBIBdIU5NKdcInNPC5huDxCXv7_U";
 
 export default function LocationManager() {
   const [location, setLocation] = useState(null);
   const [permissionResponse, requestPermission] = Location.useForegroundPermissions();
+  const navigation = useNavigation(); // Access the navigation prop
 
   const verifyPermission = async () => {
     if (permissionResponse?.granted) {
@@ -30,7 +34,7 @@ export default function LocationManager() {
       const userLocation = await Location.getCurrentPositionAsync();
       setLocation({
         latitude: userLocation.coords.latitude,
-        longitude: userLocation.coords.longitude
+        longitude: userLocation.coords.longitude,
       });
     } catch (err) {
       console.error('Error fetching location:', err);
@@ -50,6 +54,10 @@ export default function LocationManager() {
           <Text>Latitude: {location.latitude}</Text>
           <Text>Longitude: {location.longitude}</Text>
           <Image source={{ uri: mapUrl }} style={styles.mapImage} />
+          <Button
+            title="View on Map"
+            onPress={() => navigation.navigate('Map', { latitude: location.latitude, longitude: location.longitude })}
+          />
         </>
       )}
     </View>

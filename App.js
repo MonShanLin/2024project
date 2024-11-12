@@ -10,6 +10,7 @@ import GoalDetails from './components/GoalDetails';
 import Profile from './components/Profile';
 import Login from './components/Login';
 import Signup from './components/Signup';
+import Map from './components/Map';
 
 const Stack = createNativeStackNavigator();
 
@@ -56,6 +57,7 @@ export default function App() {
         })}
       />
       <Stack.Screen name="Profile" component={Profile} options={{ title: 'Profile' }} />
+      <Stack.Screen name="Map" component={Map} options={{ title: 'Map' }} />
     </>
   );
 
