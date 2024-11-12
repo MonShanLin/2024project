@@ -4,20 +4,34 @@ import * as Location from 'expo-location';
 
 export default function LocationManager() {
   const [location, setLocation] = useState(null);
+  const [permissionResponse, requestPermission] = Location.useForegroundPermissions();
+
+  // Function to check permissions
+  const verifyPermission = async () => {
+    if (permissionResponse?.granted) {
+      return true;
+    }
+
+    const { granted } = await requestPermission();
+    if (!granted) {
+      Alert.alert('Permission Denied', 'Location access is required to locate you.');
+      return false;
+    }
+
+    return true;
+  };
 
   const locateUserHandler = async () => {
-    try {
-      // Ask for permission to access location
-      const { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        Alert.alert('Permission Denied', 'Location access is needed to locate you.');
-        return;
-      }
+    // Verify permissions before attempting to get the location
+    const hasPermission = await verifyPermission();
+    if (!hasPermission) {
+      return;
+    }
 
+    try {
       // Get the current location
       const userLocation = await Location.getCurrentPositionAsync();
       setLocation(userLocation);
-      console.log('Location:', userLocation);
     } catch (err) {
       console.error('Error fetching location:', err);
       Alert.alert('Error', 'Unable to fetch location.');
