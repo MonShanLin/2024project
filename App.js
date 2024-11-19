@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Alert } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useState, useEffect } from 'react';
@@ -33,7 +33,19 @@ export default function App() {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setIsAuthenticated(!!user);
     });
-    return unsubscribe;
+
+    const subscription = Notifications.addNotificationReceivedListener((notification) => {
+      Alert.alert(
+        'Notification Received',
+        notification.request.content.body || 'You have a new notification'
+      );
+    });
+
+    // Cleanup both listeners
+    return () => {
+      unsubscribeAuth();
+      subscription.remove();
+    };
   }, []);
 
   const AuthStack = (
