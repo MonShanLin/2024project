@@ -14,8 +14,8 @@ const NotificationManager = () => {
       }
       await Notifications.scheduleNotificationAsync({
         content: {
-          title: "Goal Reminder",
-          body: "Don't forget to add a goal!",
+          title: "First Notification",
+          body: "This is my first notification!",
         },
         trigger: {
           seconds: 5,
@@ -37,7 +37,7 @@ const NotificationManager = () => {
   return (
     <View>
       <Button
-        title="Remind me to add a goal"
+        title="Add Notification"
         onPress={scheduleNotificationHandler}
       />
     </View>
