@@ -3,6 +3,11 @@
     "name": "2024project",
     "slug": "2024project",
     "version": "1.0.0",
+    "extra": {
+      "eas": {
+        "projectId": "e8350e91-b463-444c-a1b8-2e4db8ce71c5"
+      }
+    },
     "orientation": "default",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",

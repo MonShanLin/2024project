@@ -4,6 +4,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { auth } from '../Firebase/firebaseSetup';
 import { signOut } from 'firebase/auth';
 import LocationManager from './LocationManager';
+import NotificationManager from './NotificationManager'; 
 
 export default function Profile({ navigation }) {
   const currentUser = auth.currentUser;
@@ -37,6 +38,7 @@ export default function Profile({ navigation }) {
       <Text>{currentUser?.email}</Text>
       <Text>{currentUser?.uid}</Text>
       <LocationManager />
+      <NotificationManager />
     </View>
   );
 }
