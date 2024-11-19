@@ -5,12 +5,24 @@ import { useState, useEffect } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { FontAwesome } from '@expo/vector-icons';
 import { auth } from './Firebase/firebaseSetup';
+import * as Notifications from 'expo-notifications';
 import Home from './components/Home';
 import GoalDetails from './components/GoalDetails';
 import Profile from './components/Profile';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import Map from './components/Map';
+
+// Set the notification handler (outside the App function)
+Notifications.setNotificationHandler({
+  handleNotification: async () => {
+    return {
+      shouldShowAlert: true, // Show an alert when the notification is received
+      shouldPlaySound: true, // Play a sound with the notification
+      shouldSetBadge: true, // Update app badge count (iOS specific)
+    };
+  },
+});
 
 const Stack = createNativeStackNavigator();
 
